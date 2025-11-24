@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     # Habilitar módulos típicos de XAMPP (rewrite) en el arranque
-    command: /bin/sh -c "docker-php-ext-install mysqli && a2enmod rewrite && apache2-foreground"
+    command: /bin/sh -c "docker-php-ext-install pdo pdo_mysql mysqli && a2enmod rewrite && apache2-foreground"
 
   db:
     image: mariadb:11
