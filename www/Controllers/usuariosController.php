@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../Models/UsuariosModels.php';
 class usuariosController{
     private UsuariosModels $usuarios;
 
@@ -12,10 +11,16 @@ class usuariosController{
     }
 
     public function PutActualizar() :void {
-        $this->usuarios->actualizarUser();
+        $nuevoNombre = $_POST['nuevoNombre'];
+        $nuevoEmail = $_POST['nuevoEmail'];
+        $nombre = $_POST['nombre'];
+        $this->usuarios->actualizarUser($nombre, $nuevoNombre, $nuevoEmail);
         
     }
 
+    public function GetUsuarioById(int $id): ?array {
+        return $this->usuarios->obtenerPorId($id);
+    }
 }
 
 ?>

@@ -17,18 +17,42 @@ $Usuario = new UsuariosModels($db);
 $ControllerUser = new usuariosController($Usuario);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
-
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 
 switch ($metodo) {
     case "GET":
-        // GET /empleados.php  → listar empleados
-        echo json_encode($ControllerUser->GetUsusuarios());
+
+        if ($id !== null) {
+            $usuario = $ControllerUser->GetUsuarioById($id);
+
+            if ($usuario) {
+                echo json_encode($usuario);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Usuario no encontrado"]);
+            }
+        } else {
+            echo json_encode($ControllerUser->GetUsusuarios());
+        }
+
         break;
- default:
-        // Método no permitido
+    
+    case "PUT":
+
+        if ($id !== null) {
+            $nombre = $_POST['nombre'];
+            $nuevoNombre = $_POST['nuevoNombre'];
+            $nuevoEmail = $_POST['nuevoEmail'];
+
+            $buscar
+            $ControllerUser->PutActualizar();
+        }
+        break;
+
+    default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);
         break;
+
 }
 ?>

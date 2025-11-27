@@ -17,7 +17,7 @@ class UsuariosModels {
     }
      public function obtenerTodos(): array
     {
-        $sql = "SELECT id, nombre, email FROM empleados";
+        $sql = "SELECT id, nombre, email FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -33,6 +33,18 @@ class UsuariosModels {
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
         $stmt->execute();
+    }
+    public function obtenerPorId(int $id): ?array
+    {
+        $sql = "SELECT id, nombre, email FROM usuarios WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+        $usuario = $stmt->fetch();
+
+        return $usuario ?: null;
     }
 }
 
