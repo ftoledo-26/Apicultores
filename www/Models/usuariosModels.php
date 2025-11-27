@@ -17,7 +17,7 @@ class UsuariosModels {
     }
      public function obtenerTodos(): array
     {
-        $sql = "SELECT id, nombre, email FROM empleados";
+        $sql = "SELECT id, nombre, email FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
