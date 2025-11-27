@@ -24,6 +24,16 @@ class UsuariosModels {
         $stmt->execute(); // No hay parámetros, pero igual se ejecuta
         return $stmt->fetchAll();
     }
+    public function eliminarpersona(string $nombre ,int $id): array
+    {
+        $sql = "DELETE FROM  usuario WHERE nombre=:nombre AND id=:id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute(); // No hay parámetros, pero igual se ejecuta
+        return $stmt->fetchAll();
+    }
 }
 
 ?>
