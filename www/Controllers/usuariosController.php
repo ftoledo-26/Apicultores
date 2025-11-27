@@ -10,6 +10,12 @@ class usuariosController{
     public function GetUsusuarios():array{
         return $this->usuarios->obtenerTodos();
     }
+
+    public function PutActualizar() :void {
+        $this->usuarios->actualizarUser();
+        
+    }
+
 }
 
 ?>

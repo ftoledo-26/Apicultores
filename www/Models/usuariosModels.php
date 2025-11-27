@@ -24,6 +24,16 @@ class UsuariosModels {
         $stmt->execute(); // No hay parámetros, pero igual se ejecuta
         return $stmt->fetchAll();
     }
+
+    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
+    {
+        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nombreActual', $nombreActual);
+        $stmt->bindParam(':nuevoNombre', $nuevoNombre);
+        $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->execute();
+    }
 }
 
 ?>
