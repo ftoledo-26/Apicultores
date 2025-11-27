@@ -24,6 +24,16 @@ class UsuariosModels {
         $stmt->execute(); 
         return $stmt->fetchAll();
     }
+
+    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
+    {
+        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nombreActual', $nombreActual);
+        $stmt->bindParam(':nuevoNombre', $nuevoNombre);
+        $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->execute();
+    }
     public function obtenerPorId(int $id): ?array
     {
         $sql = "SELECT id, nombre, email FROM usuarios WHERE id = :id";
