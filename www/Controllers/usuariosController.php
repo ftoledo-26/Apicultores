@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../Models/UsuariosModels.php';
 class usuariosController{
     private UsuariosModels $usuarios;
 
