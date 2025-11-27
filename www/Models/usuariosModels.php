@@ -24,6 +24,18 @@ class UsuariosModels {
         $stmt->execute(); // No hay parámetros, pero igual se ejecuta
         return $stmt->fetchAll();
     }
+    public function obtenerPorId(int $id): ?array
+    {
+        $sql = "SELECT id, nombre, email FROM usuarios WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $stmt->execute();
+        $usuario = $stmt->fetch();
+
+        return $usuario ?: null;
+    }
 }
 
 ?>
