@@ -7,9 +7,7 @@ class controladorComentarios{
     
     }
 
-    public function ejecutarComentarios(){
-        
-    }
+    
 
 }
 
