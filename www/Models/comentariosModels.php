@@ -1,10 +1,8 @@
 <?php
-
 class comentarios{
     private PDO $conn;
-
-    public function __construct(PDO $conn){
-        $this->conn = $conn;
+    public function __construct(PDO $pdo){
+        $this->conn = $pdo;
     }
 
     public function aniadirComentario($comentario){
@@ -23,9 +21,11 @@ class comentarios{
     }
     public function getComentariosByUserId($id){
         $sql = "SELECT * FROM comentarios C
-                INNER JOIN usuarios U on U.id = C.";
+                INNER JOIN usuarios U on U.id = C.id_usuario
+                WHERE U.id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt -> setFetchMode(PDO::FETCH_ASSOC);
+        $stmt-> bindParam(":id", $id,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
