@@ -7,8 +7,17 @@ class controladorComentarios{
     
     }
 
-    public function ():array{
-        
+    public function GetComentario(){
+        return $this->comentariosModel->getComentarios();
+    }
+    public function GetComentarioUserId($id){
+        return $this->comentariosModel->getComentariosByUserId($id);
+    }
+
+    public function PutComentario(){
+        $id = $_POST['id'];
+        $comentario = $_POST['comentario'];
+        $this->comentariosModel->actualizarComentario($id, $comentario);
     }
 
 }
