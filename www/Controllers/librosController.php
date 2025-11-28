@@ -12,5 +12,8 @@
         $libro= $this->libro->todos();
         return $datos =["libro"=>$libro];
     }
+    public function eliminaLibro(int $id) {
+        $this->libro->eliminarLibro($id);
+    }
 }
 ?>

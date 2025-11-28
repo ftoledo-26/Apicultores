@@ -17,22 +17,35 @@ class UsuariosModels {
     }
      public function obtenerTodos(): array
     {
-        $sql = "SELECT id, nombre, email FROM empleados";
+        $sql = "SELECT id, nombre, email FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
-        $stmt->execute(); // No hay parámetros, pero igual se ejecuta
+        $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function eliminarpersona(string $nombre ,int $id): array
+    public function eliminarpersona(int $id)
     {
-        $sql = "DELETE FROM  usuario WHERE nombre=:nombre AND id=:id";
+        $sql = "DELETE FROM  comentarios WHERE id_usuario=:id";
         $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $sql = "DELETE FROM usuarios WHERE id = :id2";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+    public function obtenerPorId(int $id): ?array
+    {
+        $sql = "SELECT id, nombre, email FROM usuarios WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute(); // No hay parámetros, pero igual se ejecuta
-        return $stmt->fetchAll();
+
+        $stmt->execute();
+        $usuario = $stmt->fetch();
+
+        return $usuario ?: null;
     }
 }
 
