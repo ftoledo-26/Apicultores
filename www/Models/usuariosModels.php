@@ -33,6 +33,15 @@ class UsuariosModels {
         $sql = "DELETE FROM usuarios WHERE id = :id2";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
+    }
+    public function actualizarUser(int $id, string $nuevoNombre, string $nuevoEmail): void
+    {
+        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nombreActual', $nombreActual);
+        $stmt->bindParam(':nuevoNombre', $nuevoNombre);
+        $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array

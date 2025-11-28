@@ -15,7 +15,7 @@ $ControllerUser = new usuariosController($Usuario);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
-$nombre = isset($_GET["nombre"]) ? (int) $_GET["nombre"] : null;
+$nombre = isset($_GET["nombre"]) ? (string) $_GET["nombre"] : null;
 
 switch ($metodo) {
     case "GET":
@@ -42,6 +42,31 @@ switch ($metodo) {
                 echo json_encode(["Introduzca un id adecuado"]);
             }
         break;
+    
+   case "PUT":
+
+        if ($id !== null) {
+
+            $usuario = $ControllerUser->GetUsuarioById($id);
+
+            if ($usuario) {
+
+                $nuevoNombre = $_POST['nuevoNombre'];
+                $nuevoEmail = $_POST['nuevoEmail'];
+                $id = $_POST['id'];
+
+                $ControllerUser->PutActualizar();
+
+                echo json_encode(["message" => "Usuario actualizado"]);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Usuario no encontrado"]);
+            }
+        } else {
+            echo json_encode(["error" => "Usuario no encontrado"]);
+        }
+        break;
+
     default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);

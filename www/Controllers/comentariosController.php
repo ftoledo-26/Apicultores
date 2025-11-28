@@ -7,7 +7,9 @@ class controladorComentarios{
     
     }
 
-    
+    public function ():array{
+        
+    }
 
 }
 
