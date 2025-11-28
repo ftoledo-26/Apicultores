@@ -25,13 +25,14 @@ class UsuariosModels {
         return $stmt->fetchAll();
     }
 
-    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
+    public function actualizarUser(int $id, string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
     {
-        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
+        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual AND id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nombreActual', $nombreActual);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array
@@ -46,6 +47,8 @@ class UsuariosModels {
 
         return $usuario ?: null;
     }
+
+    
 }
 
 ?>
