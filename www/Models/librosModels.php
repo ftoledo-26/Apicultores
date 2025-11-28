@@ -1,30 +1,29 @@
 <?php
  class LibroModelo {
-    private PDO $pdo;
-//GETTER Y SETTER
-    public function setpdo($pdo){
-        $this->pdo= $pdo;
-    }
-    public function getpdo(){
-        return $this->pdo;
-    }
-    //METODOS
+    private PDO $conn;
     public function __construct(PDO $pdo){
-            $this->pdo= $pdo;
+            $this->conn= $pdo;
         }
     public function agregar(string $nombre){
         $sql = "INSERT INTO libro(nombre) VALUES (:nombre)";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nombre', $nombre);
         $stmt -> execute();
     }
-    public function todos():array{
-        $sql = "SELECT * FROM  libro";
-        $stmt = $this->pdo->prepare($sql);
+    public function obtenerTodos():array{
+        $sql = "SELECT * FROM  libros";
+        $stmt = $this->conn->prepare($sql);
         $stmt -> setFetchMode(PDO::FETCH_ASSOC);
         $stmt -> execute();
-        $todo = $stmt -> fetchAll();
-        return $todo;
+        return $stmt -> fetchAll();    
+    }
+    public function obtenerTodosId($id):array{
+        $sql = "SELECT * FROM  libros WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id);
+        $stmt -> setFetchMode(PDO::FETCH_ASSOC);
+        $stmt -> execute();
+        return $stmt -> fetchAll();    
     }
 
     public function actualizarLibro(int $id, string $nuevoTitulo, string $nuevoAutor, string $nuevaCategoria): void

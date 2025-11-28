@@ -3,3 +3,7 @@ RewriteEngine On
 RewriteRule ^usuarios/?$ usuarios.php [L,QSA]
 
 RewriteRule ^usuarios/([0-9]+)/?$ usuarios.php?id=$1 [L,QSA]
+
+RewriteRule ^libros/?$ libros.php [L,QSA]
+
+RewriteRule ^libros/([0-9]+)/?$ libros.php?id=$1 [L,QSA]
