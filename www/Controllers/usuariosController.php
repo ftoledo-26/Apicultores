@@ -13,8 +13,8 @@ class usuariosController{
     public function PutActualizar() :void {
         $nuevoNombre = $_POST['nuevoNombre'];
         $nuevoEmail = $_POST['nuevoEmail'];
-        $nombre = $_POST['nombre'];
-        $this->usuarios->actualizarUser($nombre, $nuevoNombre, $nuevoEmail);
+        $id = $_POST['id'];
+        $this->usuarios->actualizarUser($id, $nuevoNombre, $nuevoEmail);
         
     }
 

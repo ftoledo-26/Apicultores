@@ -11,7 +11,7 @@ class UsuariosModels {
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":usuario", $usuario);
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":password", $passw); // Crear funcion para cifrar si no encontramos
+        $stmt->bindParam(":password", $passw); 
 
         $stmt->execute();
     }
@@ -21,13 +21,13 @@ class UsuariosModels {
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
-        $stmt->execute(); // No hay parámetros, pero igual se ejecuta
+        $stmt->execute(); 
         return $stmt->fetchAll();
     }
 
-    public function actualizarUser(int $id, string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
+    public function actualizarUser(int $id, string $nuevoNombre, string $nuevoEmail): void
     {
-        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual AND id = :id";
+        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nombreActual', $nombreActual);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
@@ -46,6 +46,16 @@ class UsuariosModels {
         $usuario = $stmt->fetch();
 
         return $usuario ?: null;
+    }
+        public function eliminarpersona(string $nombre ,int $id): array
+    {
+        $sql = "DELETE FROM  usuario WHERE nombre=:nombre AND id=:id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute(); // No hay parámetros, pero igual se ejecuta
+        return $stmt->fetchAll();
     }
 
     
