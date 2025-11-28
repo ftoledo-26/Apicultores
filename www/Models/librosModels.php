@@ -25,5 +25,12 @@
         $stmt -> execute();
         return $stmt -> fetchAll();    
     }
+    public function eliminarLibro(int $id)
+    {
+        $sql = "DELETE FROM  libro WHERE libro=:id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
 }
 ?>

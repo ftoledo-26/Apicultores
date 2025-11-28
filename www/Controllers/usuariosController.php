@@ -21,6 +21,9 @@ class usuariosController{
     public function GetUsuarioById(int $id): ?array {
         return $this->usuarios->obtenerPorId($id);
     }
+    public function eliminarusuario(int $id) {
+        $this->usuarios->eliminarpersona($id);
+    }
 }
 
 ?>

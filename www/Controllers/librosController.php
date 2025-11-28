@@ -12,5 +12,8 @@
     public function GetLibrosById($id):array {
         return $this->libro->obtenerTodosId($id);
     }
+    public function eliminaLibro(int $id) {
+        $this->libro->eliminarLibro($id);
+    }
 }
 ?>

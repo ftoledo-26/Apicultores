@@ -1,8 +1,9 @@
 <?php
+
 class comentarios{
     private PDO $conn;
-    public function __construct(PDO $pdo){
-        $this->conn = $pdo;
+    public function __construct(PDO $conn){
+        $this->conn = $conn;
     }
 
     public function aniadirComentario($comentario){
