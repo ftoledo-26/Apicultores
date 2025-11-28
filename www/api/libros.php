@@ -29,20 +29,47 @@ switch ($metodo) {
             echo json_encode($ControllerUser->GetLibros());
         }
 
-        break;
-    
-   /* case "PUT":
+    case "PUT":
 
-        if ($id !== null) {
-            $nombre = $_POST['nombre'];
-            $nuevoNombre = $_POST['nuevoNombre'];
-            $nuevoEmail = $_POST['nuevoEmail'];
+        if($id !== null){
+            $Libros = $ControllerUser->GetLibrosById($id);
 
-            $buscar
-            $ControllerUser->PutActualizar();
+            if($Libros){
+                $nuevoTitulo = $_POST['nuevoTitulo'];
+                $nuevoAutor = $_POST['nuevoAutor'];
+                $nuevaCategoria = $_POST['nuevaCategoria'];
+
+                $ControllerUser->actualizarLibro();
+
+                echo json_encode(["message" => "Libro actualizado"]);
+            }
         }
         break;
-*/
+    
+
+        if ($id !== null) {
+
+            $libro = $ControllerUser->GetLibrosById($id);
+
+            if ($libro) {
+
+                $id = $_POST['id'];
+                $nuevoTitulo = $_POST['nuevoTitulo'];
+                $nuevoAutor = $_POST['nuevoAutor'];
+                $nuevaCategoria = $_POST['nuevaCategoria'];
+
+                $ControllerUser->actualizarLibro();
+
+                echo json_encode(["message" => "Libro actualizado"]);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Libro no encontrado"]);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Libro no encontrado"]);
+        }
+        break;
     default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);

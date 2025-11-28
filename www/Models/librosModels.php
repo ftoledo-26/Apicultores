@@ -29,7 +29,7 @@
     public function actualizarLibro(int $id, string $nuevoTitulo, string $nuevoAutor, string $nuevaCategoria): void
     {
         $sql = "UPDATE libros SET titulo = :nuevoTitulo, autor = :nuevoAutor, id_categoria = :nuevaCategoria WHERE  id = :id";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nuevoTitulo', $nuevoTitulo);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
