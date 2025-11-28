@@ -3,15 +3,12 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/Database.php";
-require_once __DIR__ . "/../Models/usuariosModels.php";
-
-
-
-require_once __DIR__ . "/../Controllers/usuariosController.php";
+require_once __DIR__ . "/../Models/librosModels.php";
+require_once __DIR__ . "/../Controllers/librosController.php";
 
 $db = Database::getConnection();
-$Usuario = new UsuariosModels($db);
-$ControllerUser = new usuariosController($Usuario);
+$Libros = new LibroModelo($db);
+$ControllerUser = new librosController($Libros);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
@@ -20,16 +17,16 @@ switch ($metodo) {
     case "GET":
 
         if ($id !== null) {
-            $usuario = $ControllerUser->GetUsuarioById($id);
+            $Libros = $ControllerUser->GetLibrosById($id);
 
-            if ($usuario) {
-                echo json_encode($usuario);
+            if ($Libros) {
+                echo json_encode($Libros);
             } else {
                 http_response_code(404);
                 echo json_encode(["error" => "Usuario no encontrado"]);
             }
         } else {
-            echo json_encode($ControllerUser->GetUsusuarios());
+            echo json_encode($ControllerUser->GetLibros());
         }
 
         break;

@@ -3,15 +3,12 @@ header("Content-Type: application/json; charset=utf-8");
 
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/Database.php";
-require_once __DIR__ . "/../Models/usuariosModels.php";
-
-
-
-require_once __DIR__ . "/../Controllers/usuariosController.php";
+require_once __DIR__ . "/../Models/comentariosModels.php";
+require_once __DIR__ . "/../Controllers/comentariosController.php";
 
 $db = Database::getConnection();
-$Usuario = new UsuariosModels($db);
-$ControllerUser = new usuariosController($Usuario);
+$Comentarios = new comentarios($db);
+$ControllerUser = new controladorComentarios($Comentarios);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
@@ -20,16 +17,16 @@ switch ($metodo) {
     case "GET":
 
         if ($id !== null) {
-            $usuario = $ControllerUser->GetUsuarioById($id);
+            $coments = $ControllerUser->GetComentarioUserId($id);
 
-            if ($usuario) {
-                echo json_encode($usuario);
+            if ($coments) {
+                echo json_encode($coments);
             } else {
                 http_response_code(404);
                 echo json_encode(["error" => "Usuario no encontrado"]);
             }
         } else {
-            echo json_encode($ControllerUser->GetUsusuarios());
+            echo json_encode($ControllerUser->GetComentario());
         }
 
         break;
