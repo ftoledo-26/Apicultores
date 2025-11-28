@@ -11,7 +11,7 @@ class UsuariosModels {
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":usuario", $usuario);
         $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":password", $passw); // Crear funcion para cifrar si no encontramos
+        $stmt->bindParam(":password", $passw); 
 
         $stmt->execute();
     }
