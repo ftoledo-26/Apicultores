@@ -27,9 +27,17 @@
     }
     public function eliminarLibro(int $id)
     {
-        $sql = "DELETE FROM  libro WHERE libro=:id";
+        $sql = "DELETE FROM  libros WHERE id=:id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt -> execute();
+    }
+    public function actualizarLibro(int $id, string $nuevoTitulo, string $nuevoAutor, string $nuevaCategoria): void
+    {
+        $sql = "UPDATE libros SET titulo = :nuevoTitulo, autor = :nuevoAutor, id_categoria = :nuevaCategoria WHERE  id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nuevoTitulo', $nuevoTitulo);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
 }

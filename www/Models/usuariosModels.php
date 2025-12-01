@@ -20,7 +20,6 @@ class UsuariosModels {
         $sql = "SELECT id, nombre, email FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
         $stmt->execute(); 
         return $stmt->fetchAll();
     }
