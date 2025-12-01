@@ -57,6 +57,38 @@ class UsuariosModels {
 
         return $usuario ?: null;
     }
+
+    public function ObtenreCampo(...$argv):array{
+        $variables = count($argv);
+        switch($variables){
+            case 1:
+                $sql = "SELECT :campo FROM usuarios";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(":campo", $argv[0]);
+                $stmt -> setFetchMode(PDO::FETCH_ASSOC);
+                $stmt -> execute();
+                return $stmt -> fetchAll(PDO::FETCH_ASSOC);
+            break;
+
+            case 2:
+                $sql = "SELECT :campo FROM usuarios where :campo = :valor";
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(":campo", $argv[0]);
+                $stmt ->bindParam(":valor",$argv[1]);
+                $stmt -> setFetchMode(PDO::FETCH_ASSOC);
+                $stmt -> execute();
+                return $stmt -> fetchAll(PDO::FETCH_ASSOC); 
+            break;
+            
+            default:
+                echo "<script>alert('No has introducido los valores adecuados');</script>";
+                return [];
+            break;
+        }
+            
+        
+        
+    }
 }
 
 ?>

@@ -24,6 +24,9 @@ class usuariosController{
     public function eliminarusuario(int $id) {
         $this->usuarios->eliminarpersona($id);
     }
+    public function ObtenerDatos(...$argv){
+        return $this->usuarios->ObtenreCampo($argv);
+    }
 }
 
 ?>
