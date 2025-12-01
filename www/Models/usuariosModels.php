@@ -63,43 +63,34 @@ class UsuariosModels {
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":nombre",$input['nombre'] );
         $stmt->bindParam(":email",$input['email'] );
-        $stmt->bindParam(":nombre",$input['contrasenia'] );
+        $stmt->bindParam(":contrasenia",$input['contrasenia'] );
         $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->execute();
 
     }
 
-    public function ObtenreCampo(...$argv):array{
-        $variables = count($argv);
-        switch($variables){
-            case 1:
-                $sql = "SELECT :campo FROM usuarios";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindParam(":campo", $argv[0]);
-                $stmt -> setFetchMode(PDO::FETCH_ASSOC);
-                $stmt -> execute();
-                return $stmt -> fetchAll(PDO::FETCH_ASSOC);
-            break;
+    public function ObtenerCampo($campo, $valor = null){
+    $permitidos = ["id", "email", "contrasenia", "rol"];
 
-            case 2:
-                $sql = "SELECT :campo FROM usuarios where :campo = :valor";
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindParam(":campo", $argv[0]);
-                $stmt ->bindParam(":valor",$argv[1]);
-                $stmt -> setFetchMode(PDO::FETCH_ASSOC);
-                $stmt -> execute();
-                return $stmt -> fetchAll(PDO::FETCH_ASSOC); 
-            break;
-            
-            default:
-                echo "<script>alert('No has introducido los valores adecuados');</script>";
-                return [];
-            break;
-        }
-            
-        
-        
+    if(!in_array($campo, $permitidos)){
+        return null;
     }
+
+    if($valor === null){
+        // SELECT campo FROM usuarios
+        $sql = "SELECT $campo FROM usuarios";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        // SELECT * FROM usuarios WHERE campo = :valor
+        $sql = "SELECT * FROM usuarios WHERE $campo = :valor";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":valor", $valor);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
 }
 
 ?>

@@ -4,6 +4,11 @@ header("Content-Type: application/json; charset=utf-8");
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/Database.php";
 require_once __DIR__ . "/../Models/usuariosModels.php";
+require_once __DIR__ . "/../Controllers/usuariosController.php";
+require_once __DIR__ . "/../vendor/autoload.php";
+
+// AQUÍ sí está permitido
+use Firebase\JWT\JWT;
 
 
 

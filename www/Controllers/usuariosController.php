@@ -22,8 +22,8 @@ class usuariosController{
     public function eliminarusuario(int $id) {
         $this->usuarios->eliminarpersona($id);
     }
-    public function ObtenerDatos(...$argv){
-        return $this->usuarios->ObtenreCampo($argv);
+    public function ObtenerDatos($campo, $valor = null){
+        return $this->usuarios->ObtenerCampo($campo, $valor);
     }
     public function crear($input){
         $this->usuarios->crearUsuario($input);
