@@ -66,6 +66,7 @@ class UsuariosModels {
         $stmt->bindParam(":contrasenia",$input['contrasenia'] );
         $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->execute();
+        return $this->conn->lastInsertId();
 
     }
 

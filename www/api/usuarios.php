@@ -7,12 +7,7 @@ require_once __DIR__ . "/../Models/usuariosModels.php";
 require_once __DIR__ . "/../Controllers/usuariosController.php";
 require_once __DIR__ . "/../vendor/autoload.php";
 
-// AQUÍ sí está permitido
 use Firebase\JWT\JWT;
-
-
-
-require_once __DIR__ . "/../Controllers/usuariosController.php";
 
 $db = Database::getConnection();
 $Usuario = new UsuariosModels($db);
@@ -71,9 +66,24 @@ switch ($metodo) {
             }
         break;
     case "POST":
-        $input = json_decode(file_get_contents("php://input"), true) ?? [];
-        echo json_encode($ControllerUser->crear($input));
-        break;
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($data) {
+            $id = $ControllerUser->crear($data);
+
+            $payload = [
+                "id"    => $id,
+                "email" => $data['email'],
+                "rol"   => 'administrador',
+                "iat"   => time(),
+                "exp"   => time() + 3600
+            ];
+            $token = JWT::encode($payload, JWT_SECRET, 'HS256');
+            echo json_encode(["token" => $token]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Faltan datos obligatorios"]);
+        }
     break;
     default:
         http_response_code(405);
