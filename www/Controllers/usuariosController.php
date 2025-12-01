@@ -10,11 +10,9 @@ class usuariosController{
         return $this->usuarios->obtenerTodos();
     }
 
-    public function PutActualizar() :void {
-        $nuevoNombre = $_POST['nuevoNombre'];
-        $nuevoEmail = $_POST['nuevoEmail'];
-        $id = $_POST['id'];
-        $this->usuarios->actualizarUser($id, $nuevoNombre, $nuevoEmail);
+    public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
+
+        $this->usuarios->actualizarUser((INT)$id, $nuevoNombre, $nuevoEmail);
         
     }
 

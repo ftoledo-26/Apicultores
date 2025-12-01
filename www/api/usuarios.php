@@ -51,11 +51,12 @@ switch ($metodo) {
 
             if ($usuario) {
 
-                $nuevoNombre = $_POST['nuevoNombre'];
-                $nuevoEmail = $_POST['nuevoEmail'];
-                $id = $_POST['id'];
-
-                $ControllerUser->PutActualizar();
+                $data = json_decode(file_get_contents("php://input"), true);
+                $nuevoNombre = $data['nuevoNombre'] ?? null;
+                $nuevoEmail = $data['nuevoEmail'] ?? null;
+                echo json_encode(["message" => "Datos recibidos", "nuevoNombre" => $nuevoNombre, "nuevoEmail" => $nuevoEmail, "id" => $id]);
+                $ControllerUser->PutActualizar($nuevoNombre, $nuevoEmail, $id);
+            
 
                 echo json_encode(["message" => "Usuario actualizado"]);
             } else {

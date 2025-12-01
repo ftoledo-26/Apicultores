@@ -40,6 +40,29 @@ switch ($metodo) {
             }
         break;
 
+    
+        case "PUT":
+
+        
+
+        if ($id !== null) {
+
+            $coments = $ControllerUser->GetComentarioUserId($id);
+
+            if ($coments) {
+            $id = $_POST['id'];
+            $comentario = $_POST['comentario'];
+
+            $ControllerUser->PutComentario();
+
+            echo json_encode(["message" => "Comentario actualizado"]);
+            }else{
+                http_response_code(404);
+                echo json_encode(["error" => "Comentario no encontrado"]);
+            }
+            
+        }
+        break;
     default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);

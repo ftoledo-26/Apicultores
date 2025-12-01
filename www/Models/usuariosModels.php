@@ -26,11 +26,15 @@ class UsuariosModels {
 
     public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
     {
+<<<<<<< HEAD
         $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
+=======
+        $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
+>>>>>>> deacc6e3b39027c68f9ce1a87ef9814c7e16d2bb
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':nombreActual', $nombreActual);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+<<<<<<< HEAD
         $stmt->execute();
     }
     public function eliminarpersona(int $id)
@@ -42,6 +46,10 @@ class UsuariosModels {
         $sql = "DELETE FROM usuarios WHERE id = :id2";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
+=======
+        $stmt->bindParam(':id', $id);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+>>>>>>> deacc6e3b39027c68f9ce1a87ef9814c7e16d2bb
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array

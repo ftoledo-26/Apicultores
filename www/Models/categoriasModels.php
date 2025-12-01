@@ -30,6 +30,14 @@ class categoriasModels{
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function ActualizarCategoria($id, $nombre){
+        $sql = "UPDATE categorias SET nombre = :nombre WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }
 }
 
 
