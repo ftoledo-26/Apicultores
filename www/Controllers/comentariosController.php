@@ -6,11 +6,15 @@ class controladorComentarios{
     $this->comentariosModel = $comentariosModel;
     
     }
-
-    public function ():array{
-        
+    public function GetComentario(){
+        return $this->comentariosModel->getComentarios();
     }
-
+    public function GetComentarioUserId($id){
+        return $this->comentariosModel->getComentariosByUserId($id);
+    }
+    public function eliminarComentario(int $id) {
+            $this->comentariosModel->eliminarComentario($id);
+        }
 }
 
 

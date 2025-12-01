@@ -20,9 +20,18 @@ class UsuariosModels {
         $sql = "SELECT id, nombre, email FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-
-        $stmt->execute();
+        $stmt->execute(); 
         return $stmt->fetchAll();
+    }
+
+    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
+    {
+        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nombreActual', $nombreActual);
+        $stmt->bindParam(':nuevoNombre', $nuevoNombre);
+        $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->execute();
     }
     public function eliminarpersona(int $id)
     {
@@ -33,15 +42,6 @@ class UsuariosModels {
         $sql = "DELETE FROM usuarios WHERE id = :id2";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
-    }
-    public function actualizarUser(int $id, string $nuevoNombre, string $nuevoEmail): void
-    {
-        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':nombreActual', $nombreActual);
-        $stmt->bindParam(':nuevoNombre', $nuevoNombre);
-        $stmt->bindParam(':nuevoEmail', $nuevoEmail);
-        $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array
