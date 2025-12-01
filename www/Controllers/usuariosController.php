@@ -25,6 +25,9 @@ class usuariosController{
     public function ObtenerDatos(...$argv){
         return $this->usuarios->ObtenreCampo($argv);
     }
+    public function crear($input){
+        $this->usuarios->crearUsuario($input);
+    }
 }
 
 ?>

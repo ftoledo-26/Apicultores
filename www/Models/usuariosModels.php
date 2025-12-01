@@ -20,21 +20,17 @@ class UsuariosModels {
         $sql = "SELECT id, nombre, email FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
         $stmt->execute(); 
         return $stmt->fetchAll();
     }
 
     public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
     {
-<<<<<<< HEAD
-        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
-=======
         $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
->>>>>>> deacc6e3b39027c68f9ce1a87ef9814c7e16d2bb
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
-<<<<<<< HEAD
         $stmt->execute();
     }
     public function eliminarpersona(int $id)
@@ -46,10 +42,8 @@ class UsuariosModels {
         $sql = "DELETE FROM usuarios WHERE id = :id2";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
-=======
         $stmt->bindParam(':id', $id);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
->>>>>>> deacc6e3b39027c68f9ce1a87ef9814c7e16d2bb
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array
@@ -63,6 +57,16 @@ class UsuariosModels {
         $usuario = $stmt->fetch();
 
         return $usuario ?: null;
+    }
+    public function crearUsuario($input){
+        $sql = "INSERT INTO usuarios (nombre, email, contrasenia) VALUE (:nombre, :email,:contrasenia)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":nombre",$input['nombre'] );
+        $stmt->bindParam(":email",$input['email'] );
+        $stmt->bindParam(":nombre",$input['contrasenia'] );
+        $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
     }
 
     public function ObtenreCampo(...$argv):array{
