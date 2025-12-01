@@ -27,12 +27,12 @@ class UsuariosModels {
 
     public function actualizarUser(int $id, string $nuevoNombre, string $nuevoEmail): void
     {
-        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
+        $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':nombreActual', $nombreActual);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
         $stmt->bindParam(':id', $id);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array
