@@ -41,10 +41,10 @@ switch ($metodo) {
             $coments = $ControllerUser->GetComentarioUserId($id);
 
             if ($coments) {
-            $id = $_POST['id'];
-            $comentario = $_POST['comentario'];
+            $data = json_decode(file_get_contents("php://input"), true);
+            $comentario = $data['comentario'] ?? null;
 
-            $ControllerUser->PutComentario();
+            $ControllerUser->PutComentario($comentario, $id);
 
             echo json_encode(["message" => "Comentario actualizado"]);
             }else{

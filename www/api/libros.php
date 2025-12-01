@@ -35,11 +35,12 @@ switch ($metodo) {
             $Libros = $ControllerUser->GetLibrosById($id);
 
             if($Libros){
-                $nuevoTitulo = $_POST['nuevoTitulo'];
-                $nuevoAutor = $_POST['nuevoAutor'];
-                $nuevaCategoria = $_POST['nuevaCategoria'];
+                $data = json_decode(file_get_contents("php://input"), true);
+                $nuevoTitulo = $data['nuevoTitulo'] ?? null;
+                $nuevoAutor = $data['nuevoAutor'] ?? null;
+                $nuevaCategoria = $data['nuevaCategoria'] ?? null;
 
-                $ControllerUser->actualizarLibro();
+                $ControllerUser->actualizarLibro($nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id);
 
                 echo json_encode(["message" => "Libro actualizado"]);
             }

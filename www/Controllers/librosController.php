@@ -13,14 +13,9 @@
         return $this->libro->obtenerTodosId($id);
     }
 
-    public function actualizarLibro(): void
+    public function actualizarLibro( $nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id): void
     {
-        $id = $_POST['id'];
-        $nuevoTitulo = $_POST['nuevoTitulo'];
-        $nuevoAutor = $_POST['nuevoAutor'];
-        $nuevaCategoria = $_POST['nuevaCategoria'];
-
-        $this->libro->actualizarLibro($id, $nuevoTitulo, $nuevoAutor, $nuevaCategoria);
+        $this->libro->actualizarLibro($nuevoTitulo, $nuevoAutor, (INT)$nuevaCategoria, (INT)$id);
     }
 }
 ?>

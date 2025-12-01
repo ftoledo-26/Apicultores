@@ -26,12 +26,15 @@
         return $stmt -> fetchAll();    
     }
 
-    public function actualizarLibro(int $id, string $nuevoTitulo, string $nuevoAutor, string $nuevaCategoria): void
+    public function actualizarLibro( string $nuevoTitulo, string $nuevoAutor, int $nuevaCategoria, int $id): void
     {
         $sql = "UPDATE libros SET titulo = :nuevoTitulo, autor = :nuevoAutor, id_categoria = :nuevaCategoria WHERE  id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nuevoTitulo', $nuevoTitulo);
+        $stmt->bindParam(':nuevoAutor', $nuevoAutor);
+        $stmt->bindParam(':nuevaCategoria', $nuevaCategoria);
         $stmt->bindParam(':id', $id);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
     }
 }

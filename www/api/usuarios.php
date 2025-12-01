@@ -46,7 +46,7 @@ switch ($metodo) {
                 $data = json_decode(file_get_contents("php://input"), true);
                 $nuevoNombre = $data['nuevoNombre'] ?? null;
                 $nuevoEmail = $data['nuevoEmail'] ?? null;
-                echo json_encode(["message" => "Datos recibidos", "nuevoNombre" => $nuevoNombre, "nuevoEmail" => $nuevoEmail, "id" => $id]);
+                
                 $ControllerUser->PutActualizar($nuevoNombre, $nuevoEmail, $id);
             
 
