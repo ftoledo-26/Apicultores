@@ -24,5 +24,8 @@
 
         $this->libro->actualizarLibro($id, $nuevoTitulo, $nuevoAutor, $nuevaCategoria);
     }
+    public function crearLibro(string $titulo, string $autor, int $categoria): void {
+        $this->libro->agregar($titulo, $autor, $categoria);
+    }
 }
 ?>

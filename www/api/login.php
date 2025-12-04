@@ -8,21 +8,19 @@ require __DIR__ . "/../Controllers/usuariosController.php";
 require __DIR__ . "/../vendor/autoload.php";
 
 use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
 
-// Conexión a la BD y controladores
 $db = Database::getConnection();
 $model = new UsuariosModels($db);
 $usuarios = new usuariosController($model);
 
-// 1. Verificar método
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(["error" => "Método no permitido, usa POST"]);
     exit;
 }
 
-// 2. Obtener datos del body
+
 $input = json_decode(file_get_contents("php://input"), true) ?? [];
 $email = $input['email'] ?? "";
 $password = $input['contrasenia'] ?? "";
@@ -33,7 +31,7 @@ if (empty($email) || empty($password)) {
     exit;
 }
 
-// 3. Buscar usuario por email
+
 $usuarioDB = $usuarios->ObtenerDatos("email", $email);
 
 if (!$usuarioDB) {
@@ -42,7 +40,7 @@ if (!$usuarioDB) {
     exit;
 }
 
-// 4. Validar contraseña
+
 if ($password !== $usuarioDB['contrasenia']) {
     http_response_code(401);
     echo json_encode($usuarioDB['contrasenia']);
@@ -50,7 +48,7 @@ if ($password !== $usuarioDB['contrasenia']) {
     exit;
 }
 
-// 5. Generar token JWT
+
 $payload = [
     "id"    => $usuarioDB['id'],
     "email" => $usuarioDB['email'],
@@ -61,7 +59,6 @@ $payload = [
 
 $token = JWT::encode($payload, JWT_SECRET, 'HS256');
 
-// 6. Devolver token
 echo json_encode([
     "token" => $token
 ]);

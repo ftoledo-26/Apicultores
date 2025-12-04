@@ -58,7 +58,7 @@ class UsuariosModels {
 
         return $usuario ?: null;
     }
-    public function crearUsuario($input){
+    public function crearUsuario($input):int{
         $sql = "INSERT INTO usuarios (nombre, email, contrasenia) VALUE (:nombre, :email,:contrasenia)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":nombre",$input['nombre'] );

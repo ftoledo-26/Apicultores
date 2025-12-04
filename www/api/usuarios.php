@@ -6,7 +6,9 @@ require_once __DIR__ . "/../config/Database.php";
 require_once __DIR__ . "/../Models/usuariosModels.php";
 require_once __DIR__ . "/../Controllers/usuariosController.php";
 require_once __DIR__ . "/../vendor/autoload.php";
+include __DIR__ . "/../middleware/auth.php";
 
+$datosToken = verificarToken();
 use Firebase\JWT\JWT;
 
 $db = Database::getConnection();
@@ -16,10 +18,15 @@ $ControllerUser = new usuariosController($Usuario);
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 
+
 switch ($metodo) {
     case "GET":
-
-        if ($id !== null) {
+        if($datosToken->rol !== 'asd'){
+            http_response_code(403);
+            echo json_encode(["error" => "Acceso denegado"]);
+            exit;
+        }
+        else if ($id !== null) {
             $usuario = $ControllerUser->GetUsuarioById($id);
 
             if ($usuario) {

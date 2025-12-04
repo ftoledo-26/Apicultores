@@ -25,8 +25,8 @@ class usuariosController{
     public function ObtenerDatos($campo, $valor = null){
         return $this->usuarios->ObtenerCampo($campo, $valor);
     }
-    public function crear($input){
-        $this->usuarios->crearUsuario($input);
+    public function crear($input):int{
+        return $this->usuarios->crearUsuario($input);
     }
 }
 

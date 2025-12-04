@@ -63,6 +63,22 @@ switch ($metodo) {
             echo json_encode(["error" => "Libro no encontrado"]);
         }
         break;
+    case "POST":
+        // Leer el cuerpo JSON de la petición
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        $titulo = $input['titulo'] ?? null;
+        $autor = $input['autor'] ?? null;
+        $categoria = (int) ($input['categoria'] ?? null);
+        echo json_encode(["titulo" => $titulo, "autor" => $autor, "categoria" => $categoria]);
+        if ($titulo && $autor && $categoria) {
+            $ControllerUser->crearLibro($titulo, $autor, $categoria);
+            echo json_encode(["message" => "Libro creado"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Faltan datos requeridos: titulo, autor, categoria"]);
+        }
+        break;
     default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);
