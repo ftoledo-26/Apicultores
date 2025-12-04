@@ -12,11 +12,25 @@ $ControllerUser = new librosController($Libros);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
+$page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
+$limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
 
 switch ($metodo) {
     case "GET":
 
-        if ($id !== null) {
+        if ($limit !== null && $page !== null) {
+
+            $librosPaginados = $ControllerUser->GetLibrosPaginados($limit, $page);
+            if($librosPaginados){
+                http_response_code(200);
+                echo json_encode($librosPaginados);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "No hay libros en esta página"]);
+                exit;
+            }
+        }
+        else if ($id !== null) {
             $Libros = $ControllerUser->GetLibrosById($id);
 
             if ($Libros) {

@@ -13,6 +13,10 @@
         return $this->libro->obtenerTodosId($id);
     }
 
+    public function GetLibrosPaginados(int $limit, int $page): array{
+        return $this->libro->obtenerLibrosPaginados($limit, $page);
+    }
+
     public function actualizarLibro( $nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id): void
     {
         $this->libro->actualizarLibro($nuevoTitulo, $nuevoAutor, (INT)$nuevaCategoria, (INT)$id);

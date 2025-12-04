@@ -37,5 +37,18 @@
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
     }
+
+    public function obtenerLibrosPaginados(int $limit, int $page): array
+    {
+        $page = ($page - 1) * $limit;
+        $sql = "SELECT id, titulo FROM libros LIMIT :limit OFFSET :page";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':page', $page, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
 }
 ?>
