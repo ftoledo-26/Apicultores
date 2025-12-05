@@ -94,10 +94,10 @@ switch ($metodo) {
             echo json_encode(["error" => "Faltan datos requeridos: titulo, autor, categoria"]);
         }
         break;
+}
     default:
         http_response_code(405);
-        echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);
+        echo json_encode(["error" => "Método no permitido"]);
         break;
-
 }
 ?>

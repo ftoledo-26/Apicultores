@@ -3,7 +3,7 @@ require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/Database.php";
 require_once __DIR__ . "/../Models/usuariosModels.php";
 require_once __DIR__ . "/../Controllers/usuariosController.php";
-
+require_once __DIR__ . "/../middleware/auth.php";
 $db = Database::getConnection();
 $Usuario = new UsuariosModels($db);
 $ControllerUser = new usuariosController($Usuario);
@@ -11,8 +11,9 @@ $ControllerUser = new usuariosController($Usuario);
 // Procesar acciones
 $mensaje = '';
 $error = '';
+$tokenData = verificarToken();
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && $tokenData->rol === 'administrador') {
     $usuario = $_POST['usuario'] ?? '';
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
