@@ -21,12 +21,7 @@ $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 
 switch ($metodo) {
     case "GET":
-        if($datosToken->rol !== 'administrador'){
-            http_response_code(403);
-            echo json_encode(["error" => "Acceso denegado"]);
-            exit;
-        }
-        else if ($id !== null) {
+        if ($id !== null) {
             $usuario = $ControllerUser->GetUsuarioById($id);
 
             if ($usuario) {
