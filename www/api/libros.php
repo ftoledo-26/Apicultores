@@ -15,11 +15,25 @@ $token = verificarToken();
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
+$page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
+$limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
 
 switch ($metodo) {
     case "GET":
 
-        if ($id !== null) {
+        if ($limit !== null && $page !== null) {
+
+            $librosPaginados = $ControllerUser->GetLibrosPaginados($limit, $page);
+            if($librosPaginados){
+                http_response_code(200);
+                echo json_encode($librosPaginados);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "No hay libros en esta página"]);
+                exit;
+            }
+        }
+        else if ($id !== null) {
             $Libros = $ControllerUser->GetLibrosById($id);
 
             if ($Libros) {
@@ -32,6 +46,7 @@ switch ($metodo) {
             echo json_encode($ControllerUser->GetLibros());
         }
 
+<<<<<<< HEAD
     break;
     case "DELETE":
         if ($token->rol !== 'administrador') {
@@ -43,6 +58,22 @@ switch ($metodo) {
                 echo json_encode(["Libro eliminado"]);
             } else {
                 echo json_encode(["Introduzca un id adecuado"]);
+=======
+    case "PUT":
+
+        if($id !== null){
+            $Libros = $ControllerUser->GetLibrosById($id);
+
+            if($Libros){
+                $data = json_decode(file_get_contents("php://input"), true);
+                $nuevoTitulo = $data['nuevoTitulo'] ?? null;
+                $nuevoAutor = $data['nuevoAutor'] ?? null;
+                $nuevaCategoria = $data['nuevaCategoria'] ?? null;
+
+                $ControllerUser->actualizarLibro($nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id);
+
+                echo json_encode(["message" => "Libro actualizado"]);
+>>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
             }
         break;
 

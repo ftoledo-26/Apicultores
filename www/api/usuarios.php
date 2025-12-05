@@ -17,6 +17,7 @@ $ControllerUser = new usuariosController($Usuario);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
+<<<<<<< HEAD
 
 
 switch ($metodo) {
@@ -25,6 +26,26 @@ switch ($metodo) {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado"]);
             exit;
+=======
+$nombre = isset($_GET["nombre"]) ? (string) $_GET["nombre"] : null;
+$page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
+$limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
+
+switch ($metodo) {
+    case "GET":
+
+        if ($limit !== null && $page !== null) {
+
+            $usuariosPaginados = $ControllerUser->GetUsuariosPaginados($limit, $page);
+            if($usuariosPaginados){
+                http_response_code(200);
+                echo json_encode($usuariosPaginados);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "No hay usuarios en esta página"]);
+                exit;
+            }
+>>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
         }
         else if ($id !== null) {
             $usuario = $ControllerUser->GetUsuarioById($id);
@@ -51,7 +72,7 @@ switch ($metodo) {
                 $data = json_decode(file_get_contents("php://input"), true);
                 $nuevoNombre = $data['nuevoNombre'] ?? null;
                 $nuevoEmail = $data['nuevoEmail'] ?? null;
-                echo json_encode(["message" => "Datos recibidos", "nuevoNombre" => $nuevoNombre, "nuevoEmail" => $nuevoEmail, "id" => $id]);
+                
                 $ControllerUser->PutActualizar($nuevoNombre, $nuevoEmail, $id);
             
 

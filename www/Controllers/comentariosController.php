@@ -13,10 +13,9 @@ class controladorComentarios{
         return $this->comentariosModel->getComentariosByUserId($id);
     }
 
-    public function PutComentario(){
-        $id = $_POST['id'];
-        $comentario = $_POST['comentario'];
-        $this->comentariosModel->actualizarComentario($id, $comentario);
+    public function PutComentario($comentario, $id): void{
+
+        $this->comentariosModel->actualizarComentario((STRING)$comentario, $id);
     }
     public function eliminarComentario(int $id) {
             $this->comentariosModel->eliminarComentario($id);

@@ -10,6 +10,10 @@ class usuariosController{
         return $this->usuarios->obtenerTodos();
     }
 
+    public function GetUsuariosPaginados(int $limit, int $page): array{
+        return $this->usuarios->obtenerUsuariosPaginados($limit, $page);
+    }
+
     public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
 
         $this->usuarios->actualizarUser((INT)$id, $nuevoNombre, $nuevoEmail);
@@ -19,6 +23,7 @@ class usuariosController{
     public function GetUsuarioById(int $id): ?array {
         return $this->usuarios->obtenerPorId($id);
     }
+<<<<<<< HEAD
     public function eliminarusuario(int $id) {
         $this->usuarios->eliminarpersona($id);
     }
@@ -28,6 +33,10 @@ class usuariosController{
     public function crear($input):int{
         return $this->usuarios->crearUsuario($input);
     }
+=======
+
+
+>>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
 }
 
 ?>
