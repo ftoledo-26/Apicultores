@@ -10,6 +10,7 @@ require_once __DIR__ . "/../middleware/auth.php";
 $db = Database::getConnection();
 $Libros = new LibroModelo($db);
 $ControllerUser = new librosController($Libros);
+$relacion = isset($_GET["include"]) ? (string) $_GET["include"] : null;
 
 $token = verificarToken();
 
@@ -20,6 +21,16 @@ $limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null;
 
 switch ($metodo) {
     case "GET":
+<<<<<<< HEAD
+        if ($id !== null && $relacion !== null) {
+            $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
+            
+            if ($Libros && count($Libros) > 0) {
+                echo json_encode($Libros);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Libro no encontrado"]);
+=======
 
         if ($limit !== null && $page !== null) {
 
@@ -31,6 +42,7 @@ switch ($metodo) {
                 http_response_code(404);
                 echo json_encode(["error" => "No hay libros en esta página"]);
                 exit;
+>>>>>>> 3b0dfdb219d01988f411cee48be58fc81cbe8e55
             }
         }
         else if ($id !== null) {
@@ -107,8 +119,14 @@ switch ($metodo) {
             http_response_code(400);
             echo json_encode(["error" => "Faltan datos requeridos: titulo, autor, categoria"]);
         }
+<<<<<<< HEAD
+        
+}
+break;
+=======
         break;
 }
+>>>>>>> 3b0dfdb219d01988f411cee48be58fc81cbe8e55
     default:
         http_response_code(405);
         echo json_encode(["error" => "Método no permitido"]);

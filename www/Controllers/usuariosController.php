@@ -15,15 +15,12 @@ class usuariosController{
     }
 
     public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
-
-        $this->usuarios->actualizarUser((INT)$id, $nuevoNombre, $nuevoEmail);
-        
+        $this->usuarios->actualizarUser("", $nuevoNombre, $nuevoEmail, (int)$id);
     }
 
     public function GetUsuarioById(int $id): ?array {
         return $this->usuarios->obtenerPorId($id);
     }
-<<<<<<< HEAD
     public function eliminarusuario(int $id) {
         $this->usuarios->eliminarpersona($id);
     }
@@ -33,10 +30,9 @@ class usuariosController{
     public function crear($input):int{
         return $this->usuarios->crearUsuario($input);
     }
-=======
-
-
->>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
+    public function obtenerPorIdyRelacion(int $id, string $relacion): ?array {
+        return $this->usuarios->obtenerPorIdyRelacion($id, $relacion);
+    }
 }
 
 ?>

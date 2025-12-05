@@ -24,6 +24,10 @@
     {
         $this->libro->actualizarLibro($nuevoTitulo, $nuevoAutor, (INT)$nuevaCategoria, (INT)$id);
     }
+    public function obtenerPorIdyCategoria(int $id, string $relacion): ?array {
+        return $this->libro->obtenerPorIdyCategoria($id, $relacion);
+    }
+    
     public function crearLibro(string $titulo, string $autor, int $categoria): void {
         $this->libro->agregar($titulo, $autor, $categoria);
     }
