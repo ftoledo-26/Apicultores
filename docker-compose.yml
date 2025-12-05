@@ -3,7 +3,7 @@ services:
     image: php:8.2-apache
     container_name: web_api
     ports:
-      - "8080:80"          # evita chocar con el puerto 80 local
+      - "8070:80"          # evita chocar con el puerto 80 local70
     volumes:
       - ./www:/var/www/html
     depends_on:
@@ -32,7 +32,7 @@ services:
     depends_on:
       - db
     ports:
-      - "8081:80"
+      - "8061:80"
 
 volumes:
   db_data:

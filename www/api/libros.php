@@ -5,10 +5,13 @@ require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/Database.php";
 require_once __DIR__ . "/../Models/librosModels.php";
 require_once __DIR__ . "/../Controllers/librosController.php";
+require_once __DIR__ . "/../middleware/auth.php";
 
 $db = Database::getConnection();
 $Libros = new LibroModelo($db);
 $ControllerUser = new librosController($Libros);
+
+$token = verificarToken();
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
@@ -31,7 +34,11 @@ switch ($metodo) {
 
     break;
     case "DELETE":
-        if ($id !== null ) {
+        if ($token->rol !== 'administrador') {
+            http_response_code(403);
+            echo json_encode(["error" => "Acceso denegado. Solo administradores pueden eliminar libros."]);
+            exit;
+        } else if ($id !== null ) {
                 $ControllerUser->eliminarLibro($id);
                 echo json_encode(["Libro eliminado"]);
             } else {
@@ -40,7 +47,11 @@ switch ($metodo) {
         break;
 
     case "PUT":
-        if ($id !== null) {
+        if ($token->rol !== 'administrador') {
+            http_response_code(403);
+            echo json_encode(["error" => "Acceso denegado. Solo administradores pueden actualizar libros."]);
+            exit;
+        } else if ($id !== null) {
 
             $libro = $ControllerUser->GetLibrosById($id);
 
@@ -64,7 +75,11 @@ switch ($metodo) {
         }
         break;
     case "POST":
-        // Leer el cuerpo JSON de la petición
+        if ($token->rol !== 'administrador') {
+            http_response_code(403);
+            echo json_encode(["error" => "Acceso denegado. Solo administradores pueden crear libros."]);
+            exit;
+        } else {
         $input = json_decode(file_get_contents('php://input'), true);
         
         $titulo = $input['titulo'] ?? null;
