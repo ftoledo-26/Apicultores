@@ -23,7 +23,7 @@ switch ($metodo) {
                 echo json_encode($coments);
             } else {
                 http_response_code(404);
-                echo json_encode(["error" => "Usuario no encontrado"]);
+                echo json_encode(["error" => "Comentario no encontrado"]);
             }
         } else {
             echo json_encode($ControllerUser->GetComentario());
@@ -31,18 +31,38 @@ switch ($metodo) {
 
         break;
     
-   /* case "PUT":
+    case "DELETE":
+        if ($id !== null ) {
+                $ControllerUser->eliminarComentario($id);
+                echo json_encode(["Comentario eliminado"]);
+            } else {
+                echo json_encode(["Introduzca un id adecuado"]);
+            }
+        break;
+
+    
+        case "PUT":
+
+        
 
         if ($id !== null) {
-            $nombre = $_POST['nombre'];
-            $nuevoNombre = $_POST['nuevoNombre'];
-            $nuevoEmail = $_POST['nuevoEmail'];
 
-            $buscar
-            $ControllerUser->PutActualizar();
+            $coments = $ControllerUser->GetComentarioUserId($id);
+
+            if ($coments) {
+            $id = $_POST['id'];
+            $comentario = $_POST['comentario'];
+
+            $ControllerUser->PutComentario();
+
+            echo json_encode(["message" => "Comentario actualizado"]);
+            }else{
+                http_response_code(404);
+                echo json_encode(["error" => "Comentario no encontrado"]);
+            }
+            
         }
         break;
-*/
     default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);

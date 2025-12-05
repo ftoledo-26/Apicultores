@@ -10,16 +10,23 @@ class usuariosController{
         return $this->usuarios->obtenerTodos();
     }
 
-    public function PutActualizar() :void {
-        $nuevoNombre = $_POST['nuevoNombre'];
-        $nuevoEmail = $_POST['nuevoEmail'];
-        $nombre = $_POST['nombre'];
-        $this->usuarios->actualizarUser($nombre, $nuevoNombre, $nuevoEmail);
+    public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
+
+        $this->usuarios->actualizarUser((INT)$id, $nuevoNombre, $nuevoEmail);
         
     }
 
     public function GetUsuarioById(int $id): ?array {
         return $this->usuarios->obtenerPorId($id);
+    }
+    public function eliminarusuario(int $id) {
+        $this->usuarios->eliminarpersona($id);
+    }
+    public function ObtenerDatos($campo, $valor = null){
+        return $this->usuarios->ObtenerCampo($campo, $valor);
+    }
+    public function crear($input):int{
+        return $this->usuarios->crearUsuario($input);
     }
 }
 

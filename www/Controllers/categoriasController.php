@@ -12,6 +12,9 @@ class categoriasController{
     public function ObtenerCategoriasId($id):array{
         return $this->cate->ObtenerTodosPorId($id);
     }
+    public function eliminarCategoria(int $id) {
+            $this->cate->eliminarCategoria($id);
+        }
 }
 
 

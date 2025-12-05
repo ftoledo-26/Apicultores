@@ -27,11 +27,23 @@ class UsuariosModels {
 
     public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
     {
-        $sql = "UPDATE empleados SET nombre = :nuevoNombre, email = :nuevoEmail WHERE nombre = :nombreActual";
+        $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(':nombreActual', $nombreActual);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->execute();
+    }
+    public function eliminarpersona(int $id)
+    {
+        $sql = "DELETE FROM  comentarios WHERE id_usuario=:id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $sql = "DELETE FROM usuarios WHERE id = :id2";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
     }
     public function obtenerPorId(int $id): ?array
@@ -46,16 +58,40 @@ class UsuariosModels {
 
         return $usuario ?: null;
     }
-        public function eliminarpersona(string $nombre ,int $id): array
-    {
-        $sql = "DELETE FROM  usuario WHERE nombre=:nombre AND id=:id";
+    public function crearUsuario($input):int{
+        $sql = "INSERT INTO usuarios (nombre, email, contrasenia) VALUE (:nombre, :email,:contrasenia)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->bindParam(':nombre', $nombre);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute(); // No hay parámetros, pero igual se ejecuta
-        return $stmt->fetchAll();
+        $stmt->bindParam(":nombre",$input['nombre'] );
+        $stmt->bindParam(":email",$input['email'] );
+        $stmt->bindParam(":contrasenia",$input['contrasenia'] );
+        $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        return $this->conn->lastInsertId();
+
     }
+
+    public function ObtenerCampo($campo, $valor = null){
+    $permitidos = ["id", "email", "contrasenia", "rol"];
+
+    if(!in_array($campo, $permitidos)){
+        return null;
+    }
+
+    if($valor === null){
+        // SELECT campo FROM usuarios
+        $sql = "SELECT $campo FROM usuarios";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        // SELECT * FROM usuarios WHERE campo = :valor
+        $sql = "SELECT * FROM usuarios WHERE $campo = :valor";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":valor", $valor);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
 }
 
 ?>

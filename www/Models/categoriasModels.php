@@ -11,6 +11,17 @@ class categoriasModels{
         $stmt-> execute();
         return $stmt->fetchAll();
     }
+    public function eliminarCategoria(int $id)
+    {
+        $sql = "DELETE FROM libros WHERE id_categoria=:id1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id1", $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $sql = "DELETE FROM categorias WHERE id=:id2";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
     public function ObtenerTodosPorId($id):array{
         $sql = "SELECT * FROM categorias WHERE id = :id";
         $stmt= $this->conn->prepare($sql);
@@ -18,6 +29,14 @@ class categoriasModels{
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function ActualizarCategoria($id, $nombre){
+        $sql = "UPDATE categorias SET nombre = :nombre WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
     }
 }
 

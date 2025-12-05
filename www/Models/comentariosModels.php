@@ -1,8 +1,9 @@
 <?php
+
 class comentarios{
     private PDO $conn;
-    public function __construct(PDO $pdo){
-        $this->conn = $pdo;
+    public function __construct(PDO $conn){
+        $this->conn = $conn;
     }
 
     public function aniadirComentario($comentario){
@@ -28,6 +29,25 @@ class comentarios{
         $stmt-> bindParam(":id", $id,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function eliminarComentario(int $id)
+    {
+        $sql = "DELETE FROM comentarios WHERE id=:id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    public function actualizarComentario($id,string $comentario ,){
+
+        $fecha = date('Y-m-d H:i:s');
+
+        $sql = "UPDATE comentarios SET comentario = :comentario, fecha = :fecha WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':comentario', $comentario);
+        $stmt->bindParam(':fecha', $fecha);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
     }
 }
 

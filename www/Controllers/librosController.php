@@ -12,5 +12,20 @@
     public function GetLibrosById($id):array {
         return $this->libro->obtenerTodosId($id);
     }
+    public function eliminarLibro(int $id) {
+        $this->libro->eliminarLibro($id);
+    }
+    public function actualizarLibro(): void
+    {
+        $id = $_POST['id'];
+        $nuevoTitulo = $_POST['nuevoTitulo'];
+        $nuevoAutor = $_POST['nuevoAutor'];
+        $nuevaCategoria = $_POST['nuevaCategoria'];
+
+        $this->libro->actualizarLibro($id, $nuevoTitulo, $nuevoAutor, $nuevaCategoria);
+    }
+    public function crearLibro(string $titulo, string $autor, int $categoria): void {
+        $this->libro->agregar($titulo, $autor, $categoria);
+    }
 }
 ?>

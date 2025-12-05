@@ -23,26 +23,62 @@ switch ($metodo) {
                 echo json_encode($Libros);
             } else {
                 http_response_code(404);
-                echo json_encode(["error" => "Usuario no encontrado"]);
+                echo json_encode(["error" => "Libro no encontrado"]);
             }
         } else {
             echo json_encode($ControllerUser->GetLibros());
         }
 
+    break;
+    case "DELETE":
+        if ($id !== null ) {
+                $ControllerUser->eliminarLibro($id);
+                echo json_encode(["Libro eliminado"]);
+            } else {
+                echo json_encode(["Introduzca un id adecuado"]);
+            }
         break;
-    
-   /* case "PUT":
 
+    case "PUT":
         if ($id !== null) {
-            $nombre = $_POST['nombre'];
-            $nuevoNombre = $_POST['nuevoNombre'];
-            $nuevoEmail = $_POST['nuevoEmail'];
 
-            $buscar
-            $ControllerUser->PutActualizar();
+            $libro = $ControllerUser->GetLibrosById($id);
+
+            if ($libro) {
+
+                $id = $_POST['id'];
+                $nuevoTitulo = $_POST['nuevoTitulo'];
+                $nuevoAutor = $_POST['nuevoAutor'];
+                $nuevaCategoria = $_POST['nuevaCategoria'];
+
+                $ControllerUser->actualizarLibro();
+
+                echo json_encode(["message" => "Libro actualizado"]);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Libro no encontrado"]);
+            }
+        } else {
+            http_response_code(404);
+            echo json_encode(["error" => "Libro no encontrado"]);
         }
         break;
-*/
+    case "POST":
+        // Leer el cuerpo JSON de la petición
+        $input = json_decode(file_get_contents('php://input'), true);
+        
+        $titulo = $input['titulo'] ?? null;
+        $autor = $input['autor'] ?? null;
+        $categoria = (int) ($input['categoria'] ?? null);
+        echo json_encode(["titulo" => $titulo, "autor" => $autor, "categoria" => $categoria]);
+        if ($titulo && $autor && $categoria) {
+            $ControllerUser->crearLibro($titulo, $autor, $categoria);
+            echo json_encode(["message" => "Libro creado"]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Faltan datos requeridos: titulo, autor, categoria"]);
+        }
+        break;
     default:
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);
