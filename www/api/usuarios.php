@@ -22,7 +22,17 @@ $relacion = isset($_GET["include"]) ? (string) $_GET["include"] : null;
 
 switch ($metodo) {
     case "GET":
-        if ($id !== null) {
+        if ($id !== null && $relacion !== null) {
+            $usuario = $ControllerUser->obtenerPorIdyRelacion($id, $relacion);
+            
+            if ($usuario && count($usuario) > 0) {
+                echo json_encode($usuario);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Usuario no encontrado"]);
+            }
+        }
+        else if ($id !== null) {
             $usuario = $ControllerUser->GetUsuarioById($id);
 
             if ($usuario) {
