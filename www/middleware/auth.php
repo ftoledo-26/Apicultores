@@ -5,7 +5,7 @@ include __DIR__ . "/../vendor/autoload.php";
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-function verificarToken() : object | null {
+function verificarToken() : object|null{
 
     $headers = getallheaders();
 
@@ -13,6 +13,7 @@ function verificarToken() : object | null {
         http_response_code(401);
         echo json_encode(["error" => "Token no enviado"]);
         return null;
+        exit;
     }
 
 

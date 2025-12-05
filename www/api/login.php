@@ -52,7 +52,7 @@ if ($password !== $usuarioDB['contrasenia']) {
 $payload = [
     "id"    => $usuarioDB['id'],
     "email" => $usuarioDB['email'],
-    "rol"   => 'administrador',
+    "rol"   => 'administrador',// addministrador o usuario
     "iat"   => time(),
     "exp"   => time() + 3600
 ];
@@ -62,5 +62,6 @@ $token = JWT::encode($payload, JWT_SECRET, 'HS256');
 echo json_encode([
     "token" => $token
 ]);
+
 exit;
 ?>

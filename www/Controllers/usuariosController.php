@@ -10,6 +10,10 @@ class usuariosController{
         return $this->usuarios->obtenerTodos();
     }
 
+    public function GetUsuariosPaginados(int $limit, int $page): array{
+        return $this->usuarios->obtenerUsuariosPaginados($limit, $page);
+    }
+
     public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
         $this->usuarios->actualizarUser("", $nuevoNombre, $nuevoEmail, (int)$id);
     }

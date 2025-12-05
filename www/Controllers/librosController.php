@@ -15,14 +15,14 @@
     public function eliminarLibro(int $id) {
         $this->libro->eliminarLibro($id);
     }
-    public function actualizarLibro(): void
-    {
-        $id = $_POST['id'];
-        $nuevoTitulo = $_POST['nuevoTitulo'];
-        $nuevoAutor = $_POST['nuevoAutor'];
-        $nuevaCategoria = $_POST['nuevaCategoria'];
 
-        $this->libro->actualizarLibro($id, $nuevoTitulo, $nuevoAutor, $nuevaCategoria);
+    public function GetLibrosPaginados(int $limit, int $page): array{
+        return $this->libro->obtenerLibrosPaginados($limit, $page);
+    }
+
+    public function actualizarLibro( $nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id): void
+    {
+        $this->libro->actualizarLibro($nuevoTitulo, $nuevoAutor, (INT)$nuevaCategoria, (INT)$id);
     }
     public function obtenerPorIdyCategoria(int $id, string $relacion): ?array {
         return $this->libro->obtenerPorIdyCategoria($id, $relacion);

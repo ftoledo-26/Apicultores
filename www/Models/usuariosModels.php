@@ -90,6 +90,7 @@ class UsuariosModels {
 
     }
 
+<<<<<<< HEAD
     public function ObtenerCampo($campo, $valor = null){
     $permitidos = ["id", "email", "contrasenia", "rol"];
 
@@ -112,6 +113,24 @@ class UsuariosModels {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
+=======
+
+
+    public function obtenerUsuariosPaginados(int $limit, int $page): array
+    {
+        $page = ($page - 1) * $limit;
+        $sql = "SELECT id, nombre, email FROM usuarios LIMIT :limit OFFSET :page";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':page', $page, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    
+>>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
 }
 
 ?>

@@ -38,14 +38,10 @@ class comentarios{
         $stmt->execute();
     }
 
-    public function actualizarComentario($id,string $comentario ,){
-
-        $fecha = date('Y-m-d H:i:s');
-
-        $sql = "UPDATE comentarios SET comentario = :comentario, fecha = :fecha WHERE id = :id";
+    public function actualizarComentario(string $comentario, int $id){
+        $sql = "UPDATE comentarios SET comentario = :comentario, fecha = NOW() WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':comentario', $comentario);
-        $stmt->bindParam(':fecha', $fecha);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
     }
