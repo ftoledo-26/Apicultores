@@ -46,7 +46,6 @@ switch ($metodo) {
             echo json_encode($ControllerUser->GetLibros());
         }
 
-<<<<<<< HEAD
     break;
     case "DELETE":
         if ($token->rol !== 'administrador') {
@@ -58,22 +57,6 @@ switch ($metodo) {
                 echo json_encode(["Libro eliminado"]);
             } else {
                 echo json_encode(["Introduzca un id adecuado"]);
-=======
-    case "PUT":
-
-        if($id !== null){
-            $Libros = $ControllerUser->GetLibrosById($id);
-
-            if($Libros){
-                $data = json_decode(file_get_contents("php://input"), true);
-                $nuevoTitulo = $data['nuevoTitulo'] ?? null;
-                $nuevoAutor = $data['nuevoAutor'] ?? null;
-                $nuevaCategoria = $data['nuevaCategoria'] ?? null;
-
-                $ControllerUser->actualizarLibro($nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id);
-
-                echo json_encode(["message" => "Libro actualizado"]);
->>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
             }
         break;
 
@@ -93,7 +76,7 @@ switch ($metodo) {
                 $nuevoAutor = $_POST['nuevoAutor'];
                 $nuevaCategoria = $_POST['nuevaCategoria'];
 
-                $ControllerUser->actualizarLibro();
+                $ControllerUser->actualizarLibro($nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id);
 
                 echo json_encode(["message" => "Libro actualizado"]);
             } else {

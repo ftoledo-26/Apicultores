@@ -13,7 +13,7 @@
         $stmt -> execute();
     }
     public function obtenerTodos():array{
-        $sql = "SELECT * FROM  libros";
+        $sql = "SELECT * FROM  libros ORDER BY id ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt -> setFetchMode(PDO::FETCH_ASSOC);
         $stmt -> execute();
@@ -27,7 +27,6 @@
         $stmt -> execute();
         return $stmt -> fetchAll();    
     }
-<<<<<<< HEAD
     public function eliminarLibro(int $id)
     {
         $sql = "DELETE FROM  libros WHERE id=:id";
@@ -35,11 +34,7 @@
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt -> execute();
     }
-    public function actualizarLibro(int $id, string $nuevoTitulo, string $nuevoAutor, string $nuevaCategoria): void
-=======
-
     public function actualizarLibro( string $nuevoTitulo, string $nuevoAutor, int $nuevaCategoria, int $id): void
->>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
     {
         $sql = "UPDATE libros SET titulo = :nuevoTitulo, autor = :nuevoAutor, id_categoria = :nuevaCategoria WHERE  id = :id";
         $stmt = $this->conn->prepare($sql);
