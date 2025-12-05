@@ -11,9 +11,7 @@ class usuariosController{
     }
 
     public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
-
-        $this->usuarios->actualizarUser((INT)$id, $nuevoNombre, $nuevoEmail);
-        
+        $this->usuarios->actualizarUser("", $nuevoNombre, $nuevoEmail, (int)$id);
     }
 
     public function GetUsuarioById(int $id): ?array {
@@ -27,6 +25,9 @@ class usuariosController{
     }
     public function crear($input){
         $this->usuarios->crearUsuario($input);
+    }
+    public function obtenerPorIdyRelacion(int $id, string $relacion): ?array {
+        return $this->usuarios->obtenerPorIdyRelacion($id, $relacion);
     }
 }
 

@@ -25,12 +25,13 @@ class UsuariosModels {
         return $stmt->fetchAll();
     }
 
-    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
+    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail, int $id): void
     {
         $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
     public function eliminarpersona(int $id)
@@ -58,15 +59,32 @@ class UsuariosModels {
 
         return $usuario ?: null;
     }
-    public function crearUsuario($input){
-        $sql = "INSERT INTO usuarios (nombre, email, contrasenia) VALUE (:nombre, :email,:contrasenia)";
+    public function obtenerPorIdyRelacion(int $id, string $relacion): ?array
+    {
+        if ($relacion === 'comentarios') {
+            $sql = "SELECT usuarios.id, usuarios.nombre, usuarios.email, 
+                    comentarios.id as comentario_id, comentarios.comentario 
+                    FROM usuarios LEFT JOIN comentarios ON comentarios.id_usuario = usuarios.id 
+                    WHERE usuarios.id = :id";
+        } else {
+            $sql = "SELECT id, nombre, email FROM usuarios WHERE id = :id";
+        }
+        
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":nombre",$input['nombre'] );
-        $stmt->bindParam(":email",$input['email'] );
-        $stmt->bindParam(":nombre",$input['contrasenia'] );
-        $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
-
+        
+        $resultado = $stmt->fetchAll();
+        return $resultado ?: null;
+    }
+    public function crearUsuario($input){
+        $sql = "INSERT INTO usuarios (nombre, email, contrasenia) VALUES (:nombre, :email, :contrasenia)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":nombre", $input['nombre']);
+        $stmt->bindParam(":email", $input['email']);
+        $stmt->bindParam(":contrasenia", $input['contrasenia']);
+        $stmt->execute();
     }
 
     public function ObtenreCampo(...$argv):array{

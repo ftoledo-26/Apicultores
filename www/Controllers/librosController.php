@@ -24,5 +24,9 @@
 
         $this->libro->actualizarLibro($id, $nuevoTitulo, $nuevoAutor, $nuevaCategoria);
     }
+    public function obtenerPorIdyCategoria(int $id, string $relacion): ?array {
+        return $this->libro->obtenerPorIdyCategoria($id, $relacion);
+    }
+    
 }
 ?>

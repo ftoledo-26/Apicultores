@@ -9,14 +9,24 @@ require_once __DIR__ . "/../Controllers/librosController.php";
 $db = Database::getConnection();
 $Libros = new LibroModelo($db);
 $ControllerUser = new librosController($Libros);
+$relacion = isset($_GET["include"]) ? (string) $_GET["include"] : null;
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 
 switch ($metodo) {
     case "GET":
-
-        if ($id !== null) {
+        if ($id !== null && $relacion !== null) {
+            $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
+            
+            if ($Libros && count($Libros) > 0) {
+                echo json_encode($Libros);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Libro no encontrado"]);
+            }
+        }
+        else if ($id !== null) {
             $Libros = $ControllerUser->GetLibrosById($id);
 
             if ($Libros) {
