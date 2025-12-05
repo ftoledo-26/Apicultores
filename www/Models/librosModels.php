@@ -4,10 +4,12 @@
     public function __construct(PDO $pdo){
             $this->conn= $pdo;
         }
-    public function agregar(string $nombre){
-        $sql = "INSERT INTO libro(nombre) VALUES (:nombre)";
+    public function agregar(string $nombre, string $autor, int $categoria):void{
+        $sql = "INSERT INTO libros (titulo, autor, id_categoria) VALUES (:nombre, :autor, :categoria)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nombre', $nombre);
+        $stmt->bindParam(':autor', $autor);
+        $stmt->bindParam(':categoria', $categoria);
         $stmt -> execute();
     }
     public function obtenerTodos():array{

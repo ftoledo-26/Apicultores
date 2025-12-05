@@ -4,10 +4,12 @@ header("Content-Type: application/json; charset=utf-8");
 require_once __DIR__ . "/../config/config.php";
 require_once __DIR__ . "/../config/Database.php";
 require_once __DIR__ . "/../Models/usuariosModels.php";
-
-
-
 require_once __DIR__ . "/../Controllers/usuariosController.php";
+require_once __DIR__ . "/../vendor/autoload.php";
+include __DIR__ . "/../middleware/auth.php";
+
+$datosToken = verificarToken();
+use Firebase\JWT\JWT;
 
 $db = Database::getConnection();
 $Usuario = new UsuariosModels($db);
@@ -17,19 +19,10 @@ $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 $relacion = isset($_GET["include"]) ? (string) $_GET["include"] : null;
 
+
 switch ($metodo) {
     case "GET":
-        if ($id !== null && $relacion !== null) {
-            $usuario = $ControllerUser->obtenerPorIdyRelacion($id, $relacion);
-            
-            if ($usuario && count($usuario) > 0) {
-                echo json_encode($usuario);
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Usuario no encontrado"]);
-            }
-        }
-        else if ($id !== null) {
+        if ($id !== null) {
             $usuario = $ControllerUser->GetUsuarioById($id);
 
             if ($usuario) {
@@ -76,9 +69,24 @@ switch ($metodo) {
             }
         break;
     case "POST":
-        $input = json_decode(file_get_contents("php://input"), true) ?? [];
-        echo json_encode($ControllerUser->crear($input));
-        break;
+        $data = json_decode(file_get_contents("php://input"), true);
+
+        if ($data) {
+            $id = $ControllerUser->crear($data);
+
+            $payload = [
+                "id"    => $id,
+                "email" => $data['email'],
+                "rol"   => 'administrador',
+                "iat"   => time(),
+                "exp"   => time() + 3600
+            ];
+            $token = JWT::encode($payload, JWT_SECRET, 'HS256');
+            echo json_encode(["token" => $token]);
+        } else {
+            http_response_code(400);
+            echo json_encode(["error" => "Faltan datos obligatorios"]);
+        }
     break;
     default:
         http_response_code(405);

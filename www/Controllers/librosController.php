@@ -28,5 +28,8 @@
         return $this->libro->obtenerPorIdyCategoria($id, $relacion);
     }
     
+    public function crearLibro(string $titulo, string $autor, int $categoria): void {
+        $this->libro->agregar($titulo, $autor, $categoria);
+    }
 }
 ?>

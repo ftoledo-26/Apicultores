@@ -5,7 +5,8 @@ CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre NVARCHAR(50) NOT NULL,
     email NVARCHAR(255) NOT NULL UNIQUE,
-    contrasenia VARCHAR(255) NOT NULL
+    contrasenia VARCHAR(255) NOT NULL,
+    rol nvarchar(50) NOT NULL
 );
 
 -- Tabla de categorías
