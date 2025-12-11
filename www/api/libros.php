@@ -21,16 +21,6 @@ $limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null;
 
 switch ($metodo) {
     case "GET":
-<<<<<<< HEAD
-        if ($id !== null && $relacion !== null) {
-            $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
-            
-            if ($Libros && count($Libros) > 0) {
-                echo json_encode($Libros);
-            } else {
-                http_response_code(404);
-                echo json_encode(["error" => "Libro no encontrado"]);
-=======
 
         if ($limit !== null && $page !== null) {
 
@@ -42,7 +32,6 @@ switch ($metodo) {
                 http_response_code(404);
                 echo json_encode(["error" => "No hay libros en esta página"]);
                 exit;
->>>>>>> 3b0dfdb219d01988f411cee48be58fc81cbe8e55
             }
         }
         else if ($id !== null) {
@@ -58,7 +47,6 @@ switch ($metodo) {
             echo json_encode($ControllerUser->GetLibros());
         }
 
-<<<<<<< HEAD
     break;
     case "DELETE":
         if ($token->rol !== 'administrador') {
@@ -70,25 +58,8 @@ switch ($metodo) {
                 echo json_encode(["Libro eliminado"]);
             } else {
                 echo json_encode(["Introduzca un id adecuado"]);
-=======
-    case "PUT":
-
-        if($id !== null){
-            $Libros = $ControllerUser->GetLibrosById($id);
-
-            if($Libros){
-                $data = json_decode(file_get_contents("php://input"), true);
-                $nuevoTitulo = $data['nuevoTitulo'] ?? null;
-                $nuevoAutor = $data['nuevoAutor'] ?? null;
-                $nuevaCategoria = $data['nuevaCategoria'] ?? null;
-
-                $ControllerUser->actualizarLibro($nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id);
-
-                echo json_encode(["message" => "Libro actualizado"]);
->>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
             }
         break;
-
     case "PUT":
         if ($token->rol !== 'administrador') {
             http_response_code(403);
@@ -105,7 +76,7 @@ switch ($metodo) {
                 $nuevoAutor = $_POST['nuevoAutor'];
                 $nuevaCategoria = $_POST['nuevaCategoria'];
 
-                $ControllerUser->actualizarLibro();
+                $ControllerUser->actualizarLibro($nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id);
 
                 echo json_encode(["message" => "Libro actualizado"]);
             } else {
@@ -136,14 +107,9 @@ switch ($metodo) {
             http_response_code(400);
             echo json_encode(["error" => "Faltan datos requeridos: titulo, autor, categoria"]);
         }
-<<<<<<< HEAD
         
 }
 break;
-=======
-        break;
-}
->>>>>>> 3b0dfdb219d01988f411cee48be58fc81cbe8e55
     default:
         http_response_code(405);
         echo json_encode(["error" => "Método no permitido"]);
