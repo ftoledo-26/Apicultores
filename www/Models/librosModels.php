@@ -86,5 +86,16 @@
 
         return $stmt->fetchAll();
     }
+
+    public function export(string $ruta)  {
+        $sql = "SELECT * FROM libros";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $json = json_encode($data, JSON_PRETTY_PRINT,JSON_UNESCAPED_UNICODE);
+        return file_put_contents($ruta, $json) !== false;
+    }
 }
 ?>
