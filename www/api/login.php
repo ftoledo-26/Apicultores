@@ -52,7 +52,7 @@ if ($password !== $usuarioDB['contrasenia']) {
 $payload = [
     "id"    => $usuarioDB['id'],
     "email" => $usuarioDB['email'],
-    "rol"   => 'administrador',// addministrador o usuario
+    "rol"   => 'usuario',// addministrador o usuario
     "iat"   => time(),
     "exp"   => time() + 3600
 ];

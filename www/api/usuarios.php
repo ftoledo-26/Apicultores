@@ -21,9 +21,6 @@ $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 
 switch ($metodo) {
     case "GET":
-<<<<<<< HEAD
-        if ($id !== null) {
-=======
         if ($id !== null && $relacion !== null) {
             $usuario = $ControllerUser->obtenerPorIdyRelacion($id, $relacion);
             
@@ -35,7 +32,6 @@ switch ($metodo) {
             }
         }
         else if ($id !== null) {
->>>>>>> b81fbdfe475ee5a6ab2d215c3791c6652d4984cf
             $usuario = $ControllerUser->GetUsuarioById($id);
 
             if ($usuario) {

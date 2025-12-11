@@ -6,4 +6,4 @@ node_modules/
 .DS_Store
 composer.lock
 composer.json
-libros_completos.json
+libros_completo.json

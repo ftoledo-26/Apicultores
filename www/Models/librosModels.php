@@ -29,10 +29,17 @@
     }
     public function eliminarLibro(int $id)
     {
-        $sql = "DELETE FROM  libros WHERE id=:id";
+        // Primero elimina los comentarios relacionados
+        $sqlComentarios = "DELETE FROM comentarios WHERE id_libro = :id";
+        $stmtComentarios = $this->conn->prepare($sqlComentarios);
+        $stmtComentarios->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmtComentarios->execute();
+    
+        // Luego elimina el libro
+        $sql = "DELETE FROM libros WHERE id=:id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt -> execute();
+        $stmt->execute();
     }
     public function actualizarLibro( string $nuevoTitulo, string $nuevoAutor, int $nuevaCategoria, int $id): void
     {

@@ -25,13 +25,12 @@ class UsuariosModels {
         return $stmt->fetchAll();
     }
 
-    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail, int $id): void
+    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
     {
         $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
     public function eliminarpersona(int $id)
@@ -90,7 +89,6 @@ class UsuariosModels {
 
     }
 
-<<<<<<< HEAD
     public function ObtenerCampo($campo, $valor = null){
     $permitidos = ["id", "email", "contrasenia", "rol"];
 
@@ -113,7 +111,6 @@ class UsuariosModels {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
-=======
 
 
     public function obtenerUsuariosPaginados(int $limit, int $page): array
@@ -130,7 +127,6 @@ class UsuariosModels {
     }
 
     
->>>>>>> 154dc7b9be973b54b801382f15d8611af19254df
 }
 
 ?>
