@@ -54,23 +54,26 @@
     }
 
     public function obtenerPorIdyCategoria(int $id, string $relacion): ?array
-    {
-        if ($relacion === 'categorias') {
-            $sql = "SELECT libros.id, libros.titulo, categorias.nombre AS categoria_nombre
-                    FROM libros LEFT JOIN categorias ON categorias.id = libros.id_categoria 
-                    WHERE libros.id = :id";
-        } else {
-            $sql = "SELECT id, nombre, email FROM usuarios WHERE id = :id";
-        }
-        
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
-        
-        $resultado = $stmt->fetchAll();
-        return $resultado ?: null;
+{
+    // Validamos relación
+    if ($relacion !== 'categorias') {
+        return null; // o puedes devolver un array con error
     }
+
+    // Query
+    $sql = "SELECT libros.id, libros.titulo, categorias.nombre AS categoria_nombre
+            FROM libros 
+            LEFT JOIN categorias ON categorias.id = libros.id_categoria 
+            WHERE libros.id = :id";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $resultado ?: null;
+}
     public function obtenerLibrosPaginados(int $limit, int $page): array
     {
         $page = ($page - 1) * $limit;

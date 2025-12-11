@@ -6,7 +6,8 @@ RewriteRule ^usuarios/([0-9]+)/([^/]+)/?$ usuarios.php?id=$1&include=$2 [L,QSA]
 
 RewriteRule ^libros/?$ libros.php [L,QSA]
 RewriteRule ^libros/([0-9]+)/?$ libros.php?id=$1 [L,QSA]
-RewriteRule ^libros/([0-9]+)/([^/]+)/?$ libros.php?id=$1&include=$2 [L,QSA]
+RewriteRule ^api/libros/?$ api/libros.php [L,QSA]
+
 
 RewriteRule ^comentarios/?$ comentarios.php [L,QSA]
 RewriteRule ^comentarios/([0-9]+)/?$ comentarios.php?id=$1 [L,QSA]

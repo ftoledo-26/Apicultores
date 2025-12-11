@@ -24,7 +24,7 @@ switch ($metodo) {
         if ($id !== null && $relacion !== null) {
             $usuario = $ControllerUser->obtenerPorIdyRelacion($id, $relacion);
             
-            if ($usuario && count($usuario) > 0) {
+            if ($usuario) {
                 echo json_encode($usuario);
             } else {
                 http_response_code(404);

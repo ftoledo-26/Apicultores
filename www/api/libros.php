@@ -17,7 +17,8 @@ $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 $page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
 $limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
-$relacion = isset($_GET["relacion"]) ? $_GET["relacion"] : null;
+$relacion = isset($_GET["include"]) ? $_GET["include"] : null;
+$esport = isset($_GET[''])
 
 switch ($metodo) {
     case "GET":
@@ -25,7 +26,7 @@ switch ($metodo) {
         if ($id !== null && $relacion !== null) {
             $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
             
-            if ($Libros && count($Libros) > 0) {
+            if ($Libros) {
                 echo json_encode($Libros);
             } else {
                 http_response_code(404);
