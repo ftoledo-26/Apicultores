@@ -85,5 +85,11 @@ def descargar_todos_los_libros(out_file="libros_completo.json", limite=50):
         print("No se detectaron categorías nuevas.")
 
 
+def insert():
+
+
+
+
+
 if __name__ == "__main__":
     descargar_todos_los_libros()
