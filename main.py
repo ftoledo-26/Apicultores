@@ -67,7 +67,9 @@ def descargar_todos_los_libros(out_file="libros_completo.json", limite=50):
             offset += limite
             pagina += 1
             time.sleep(0.2)  # evitar saturar la API
-
+            # Guardar JSON incremental
+            with open("libros.json", "w", encoding="utf-8") as f:
+                json.dump(libros_totales, f, indent=4, ensure_ascii=False)
     # Guardar JSON final
     with open(out_file, "w", encoding="utf-8") as f:
         json.dump(libros_totales, f, indent=4, ensure_ascii=False)

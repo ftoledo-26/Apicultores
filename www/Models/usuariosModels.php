@@ -25,13 +25,12 @@ class UsuariosModels {
         return $stmt->fetchAll();
     }
 
-    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail, int $id): void
+    public function actualizarUser(string $nombreActual, string $nuevoNombre, string $nuevoEmail): void
     {
         $sql = "UPDATE usuarios SET nombre = :nuevoNombre, email = :nuevoEmail WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(':nuevoNombre', $nuevoNombre);
         $stmt->bindParam(':nuevoEmail', $nuevoEmail);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
     }
     public function eliminarpersona(int $id)
