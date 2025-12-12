@@ -87,15 +87,23 @@
         return $stmt->fetchAll();
     }
 
-    public function export(string $ruta)  {
-        $sql = "SELECT * FROM libros";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-
-        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $json = json_encode($data, JSON_PRETTY_PRINT,JSON_UNESCAPED_UNICODE);
-        return file_put_contents($ruta, $json) !== false;
+    public function export() {
+    // Evitar output previo
+    if (headers_sent()) {
+        exit("No se pueden enviar headers, output previo detectado");
     }
+
+    header('Content-Type: application/json; charset=utf-8');
+    header('Content-Disposition: attachment; filename="libros.json"');
+
+    $sql = "SELECT * FROM libros";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->execute();
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
 }
 ?>

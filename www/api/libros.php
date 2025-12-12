@@ -18,12 +18,14 @@ $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 $page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
 $limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
 $relacion = isset($_GET["include"]) ? $_GET["include"] : null;
-$esport = isset($_GET['export']) ? $_GEt['export'] : null;
+$esport = isset($_GET['export']) ? $_GET['export'] : null;
 
 switch ($metodo) {
     case "GET":
-
-        if ($id !== null && $relacion !== null) {
+        if($esport !== null){
+            $ControllerUser->export("librito.json");
+        }
+        else if ($id !== null && $relacion !== null) {
             $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
             
             if ($Libros) {
@@ -60,7 +62,7 @@ switch ($metodo) {
 
     break;
     case "DELETE":
-        if ($token->rol !== 'administrador') {
+        if (!$token || !property_exists($token, 'rol') || $token->rol !== 'administrador') {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado. Solo administradores pueden eliminar libros."]);
             exit;
@@ -72,7 +74,7 @@ switch ($metodo) {
             }
         break;
     case "PUT":
-        if ($token->rol !== 'administrador') {
+        if (!$token || !property_exists($token, 'rol') || $token->rol !== 'administrador') {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado. Solo administradores pueden actualizar libros."]);
             exit;
@@ -100,7 +102,7 @@ switch ($metodo) {
         }
         break;
     case "POST":
-        if ($token->rol !== 'administrador') {
+        if (!$token || !property_exists($token, 'rol') || $token->rol !== 'administrador') {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado. Solo administradores pueden crear libros."]);
             exit;

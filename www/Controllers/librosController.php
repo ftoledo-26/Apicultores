@@ -31,5 +31,8 @@
     public function crearLibro(string $titulo, string $autor, int $categoria): void {
         $this->libro->agregar($titulo, $autor, $categoria);
     }
+    public function export(string $ruta){
+        $this->libro->export($ruta);
+    }
 }
 ?>

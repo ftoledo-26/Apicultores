@@ -67,12 +67,18 @@
     <div id="swagger-ui"></div>
 
     <div class="token-container">
-      <input 
-        type="text" 
-        id="tokenInput" 
-        placeholder="Ingrese token de usuario"
-      />
-      <button onclick="addToken()">Agregar Token</button>
+      <div style="margin-bottom:8px;">
+        <input 
+          type="text" 
+          id="tokenInput" 
+          placeholder="Ingrese token de usuario"
+        />
+      </div>
+      <div>
+        <button onclick="addToken()">Guardar</button>
+        <button onclick="clearToken()" style="margin-left:6px;background:#f44336">Borrar</button>
+        <button onclick="copyTokenForPostman()" style="margin-left:6px;background:#009688">Copiar (Postman)</button>
+      </div>
     </div>
 
     <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
@@ -80,34 +86,51 @@
     <script>
     let currentToken = localStorage.getItem('userToken') || '';
 
+    function setSwaggerAuth(token){
+      if (!window.ui) return;
+      try{
+        const name = 'BearerAuth';
+        window.ui.preauthorizeApiKey && window.ui.preauthorizeApiKey(name, token);
+        if (window.ui.authActions && typeof window.ui.authActions.authorize === 'function'){
+          const scheme = { 'BearerAuth': {name: 'Authorization', schema: {type: 'apiKey'}, value: 'Bearer ' + token } };
+          window.ui.authActions.authorize(scheme);
+        }
+      }catch(e){console.warn('No se pudo preautorizar', e)}
+    }
+
     function addToken() {
       const token = document.getElementById('tokenInput').value;
       if (token.trim()) {
         localStorage.setItem('userToken', token);
         currentToken = token;
         alert('Token guardado correctamente');
-        // Actualizar Swagger UI con el token
-        if (window.ui) {
-          window.ui.presets.push({
-            statePlugins: {
-              auth: {
-                actions: {
-                  authorize: () => {
-                    window.ui.setScheme({
-                      BearerAuth: {
-                        value: {
-                          token: token
-                        }
-                      }
-                    });
-                  }
-                }
-              }
-            }
-          });
-        }
+        setSwaggerAuth(token);
       } else {
         alert('Por favor ingrese un token');
+      }
+    }
+
+    function clearToken(){
+      localStorage.removeItem('userToken');
+      currentToken = '';
+      document.getElementById('tokenInput').value = '';
+      alert('Token borrado');
+    }
+
+    // Login removed — only token input is used now
+
+    function copyTokenForPostman(){
+      const token = document.getElementById('tokenInput').value || localStorage.getItem('userToken') || '';
+      if (!token) { alert('No hay token para copiar'); return; }
+      const headerValue = 'Bearer ' + token;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(headerValue).then(()=>{
+          alert('Token copiado al portapapeles (lista para Postman)');
+        }, ()=>{
+          prompt('Copiar manualmente:', headerValue);
+        });
+      } else {
+        prompt('Copiar manualmente:', headerValue);
       }
     }
 
@@ -121,6 +144,17 @@
         url: "openapi.yaml", 
         dom_id: '#swagger-ui',
         deepLinking: true,
+        // Añadir header Authorization a todas las peticiones si existe token en localStorage
+        requestInterceptor: (req) => {
+          try{
+            const t = localStorage.getItem('userToken') || '';
+            if (t && t.trim()) {
+              req.headers = req.headers || {};
+              req.headers['Authorization'] = 'Bearer ' + t;
+            }
+          }catch(e){/* no-op */}
+          return req;
+        },
         presets: [
           SwaggerUIBundle.presets.apis,
           SwaggerUIStandalonePreset

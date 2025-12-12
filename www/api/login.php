@@ -35,15 +35,13 @@ if (empty($email) || empty($password)) {
 $usuarioDB = $usuarios->ObtenerDatos("email", $email);
 
 if (!$usuarioDB) {
-    echo json_encode($usuarioDB['contrasenia'] ? 401 : 404);
+    http_response_code(404);
     echo json_encode(["error" => "Email no encontrado"]);
     exit;
 }
 
-
 if ($password !== $usuarioDB['contrasenia']) {
     http_response_code(401);
-    echo json_encode($usuarioDB['contrasenia']);
     echo json_encode(["error" => "Contraseña incorrecta"]);
     exit;
 }
@@ -52,7 +50,7 @@ if ($password !== $usuarioDB['contrasenia']) {
 $payload = [
     "id"    => $usuarioDB['id'],
     "email" => $usuarioDB['email'],
-    "rol"   => 'administrador',// administrador o usuario
+    "rol"   => 'administrador',// addministrador o usuario
     "iat"   => time(),
     "exp"   => time() + 3600
 ];

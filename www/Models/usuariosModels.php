@@ -39,10 +39,9 @@ class UsuariosModels {
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
-        $sql = "DELETE FROM usuarios WHERE id = :id2";
+        $sql = "DELETE FROM usuarios WHERE id = :id";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":id2", $id, PDO::PARAM_INT);
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
     }
