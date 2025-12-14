@@ -19,6 +19,7 @@ $page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
 $limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
 $relacion = isset($_GET["include"]) ? $_GET["include"] : null;
 $esport = isset($_GET['export']) ? $_GET['export'] : null;
+$count = isset($_GET['count']) ? $_GET['count'] : null;
 
 switch ($metodo) {
     case "GET":
@@ -46,6 +47,10 @@ switch ($metodo) {
                 echo json_encode(["error" => "No hay libros en esta página"]);
                 exit;
             }
+        }
+        else if($count !== null){
+            $totalLibros = $ControllerUser->cantidadLibros();
+            echo json_encode(["total_libros" => $totalLibros]);
         }
         else if ($id !== null) {
             $Libros = $ControllerUser->GetLibrosById($id);

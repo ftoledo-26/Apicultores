@@ -17,7 +17,7 @@ class UsuariosModels {
     }
      public function obtenerTodos(): array
     {
-        $sql = "SELECT id, nombre, email FROM usuarios";
+        $sql = "SELECT id, nombre, email, rol FROM usuarios";
         $stmt = $this->conn->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
@@ -76,39 +76,30 @@ class UsuariosModels {
         $resultado = $stmt->fetchAll();
         return $resultado ?: null;
     }
-    public function crearUsuario($input):int{
-        $sql = "INSERT INTO usuarios (nombre, email, contrasenia) VALUE (:nombre, :email,:contrasenia)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":nombre",$input['nombre'] );
-        $stmt->bindParam(":email",$input['email'] );
-        $stmt->bindParam(":contrasenia",$input['contrasenia'] );
-        $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $stmt->execute();
-        return $this->conn->lastInsertId();
+    public function crearUsuario($input): int {
+        $hashed = password_hash($input['contrasenia'], PASSWORD_DEFAULT);
+        $rol = $input['rol'] ?? 'user';
 
+        $sql = "INSERT INTO usuarios (nombre, email, contrasenia, rol) VALUES (:nombre, :email, :contrasenia, :rol)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(":nombre", $input['nombre']);
+        $stmt->bindValue(":email", $input['email']);
+        $stmt->bindValue(":contrasenia", $hashed);
+        $stmt->bindValue(":rol", $rol);
+
+        $stmt->execute();
+
+        return (int) $this->conn->lastInsertId();
     }
 
-    public function ObtenerCampo($campo, $valor = null){
-    $permitidos = ["id", "email", "contrasenia", "rol"];
-
-    if(!in_array($campo, $permitidos)){
-        return null;
-    }
-
-    if($valor === null){
-        // SELECT campo FROM usuarios
-        $sql = "SELECT $campo FROM usuarios";
+    public function ObtenerCampo($campo):array{
+        $sql = "SELECT * FROM usuarios WHERE email = :email LIMIT 1";
         $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(":email", $campo);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } else {
-        // SELECT * FROM usuarios WHERE campo = :valor
-        $sql = "SELECT * FROM usuarios WHERE $campo = :valor";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam(":valor", $valor);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
+
+        return $stmt->fetch();
 }
 
 

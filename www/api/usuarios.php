@@ -17,6 +17,7 @@ $ControllerUser = new usuariosController($Usuario);
 
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
+$relacion = isset($_GET["relacion"]) ? $_GET["relacion"] : null;
 
 
 switch ($metodo) {
@@ -46,8 +47,11 @@ switch ($metodo) {
 
         break;
     case "PUT":
-        
-        if ($id !== null) {
+        if ($datosToken->rol !== 'administrador') {
+            http_response_code(403);
+            echo json_encode(["error" => "Acceso denegado. Solo administradores pueden actualizar usuarios."]);
+            exit;
+        } else if ($id !== null) {
 
             $usuario = $ControllerUser->GetUsuarioById($id);
 
@@ -70,7 +74,11 @@ switch ($metodo) {
         }
         break;
     case "DELETE":
-        if ($id !== null ) {
+            if ($datosToken->rol !== 'administrador') {
+                http_response_code(403);
+                echo json_encode(["error" => "Acceso denegado. Solo administradores pueden eliminar usuarios."]);
+                exit;
+            } else if ($id !== null ) {
                 $ControllerUser->eliminarusuario($id);
                 echo json_encode(["Usuario eliminado"]);
             } else {
@@ -78,24 +86,32 @@ switch ($metodo) {
             }
         break;
     case "POST":
-        $data = json_decode(file_get_contents("php://input"), true);
-
-        if ($data) {
-            $id = $ControllerUser->crear($data);
-
-            $payload = [
-                "id"    => $id,
-                "email" => $data['email'],
-                "rol"   => 'administrador',
-                "iat"   => time(),
-                "exp"   => time() + 3600
-            ];
-            $token = JWT::encode($payload, JWT_SECRET, 'HS256');
-            echo json_encode(["token" => $token]);
+        if ($datosToken->rol !== 'administrador') {
+            http_response_code(403);
+            echo json_encode(["error" => "Acceso denegado. Solo administradores pueden crear usuarios."]);
+            exit;
         } else {
-            http_response_code(400);
-            echo json_encode(["error" => "Faltan datos obligatorios"]);
+        $data = json_decode(file_get_contents("php://input"), true);
+            if($data){
+                $nombre = $data['nombre'] ?? null;
+                $email = $data['email'] ?? null;
+                $contrasenia = $data['contrasenia'] ?? null;
+                $rol = $data['rol'] ?? 'usuario';
+
+                $nuevoId = $ControllerUser->crear([
+                    'nombre' => $nombre,
+                    'email' => $email,
+                    'contrasenia' => $contrasenia,
+                    'rol' => $rol
+                ]);
+
+                echo json_encode(["message" => "Usuario creado", "id" => $nuevoId]);
+            } else {
+                http_response_code(400);
+                echo json_encode(["error" => "Datos inválidos"]);
+            }
         }
+        
     break;
         http_response_code(405);
         echo json_encode(["error" => "Solo GET, POST, PUT y DELETE"]);
