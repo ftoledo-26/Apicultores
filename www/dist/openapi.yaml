@@ -2,14 +2,21 @@ openapi: 3.0.3
 info:
   title: API de Biblioteca y Libros
   description: |-
-    Esta es la documentación para la API de gestión de una biblioteca.
-    Permite realizar operaciones CRUD sobre libros, usuarios, categorías y comentarios.
+    Esta es la documentación para la API de gestión de una biblioteca. 
+    Permite a los usuarios autenticarse para obtener un token y luego realizar operaciones CRUD sobre libros, categorías y comentarios.
+
+    **Cómo autenticarse:**
+    1.  Usa el endpoint `POST /login.php` con tus credenciales.
+    2.  Si son correctas, recibirás un `token` en la respuesta.
+    3.  Copia ese token en el campo "Ingrese token de usuario" de la esquina superior derecha y haz clic en "Guardar". Las peticiones a endpoints protegidos (🔒) usarán este token automáticamente.
   version: 1.0.0
 servers:
   - url: http://localhost:8080/api
     description: Servidor de desarrollo
 
 tags:
+  - name: Autenticación
+    description: Obtener token de acceso.
   - name: Libros
     description: Operaciones sobre los libros
   - name: Usuarios
@@ -20,6 +27,33 @@ tags:
     description: Gestión de comentarios en los libros
 
 paths:
+  # --- Endpoint de Autenticación ---
+  /login.php:
+    post:
+      tags:
+        - Autenticación
+      summary: Iniciar sesión para obtener un token de acceso
+      description: Proporciona tus credenciales para recibir un token JWT. Este token debe ser usado en la cabecera `Authorization` como `Bearer {token}` para acceder a los endpoints protegidos.
+      operationId: loginUser
+      requestBody:
+        description: Credenciales del usuario para iniciar sesión.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: Autenticación exitosa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSuccess'
+        '401':
+          description: No autorizado. Credenciales inválidas.
+        '400':
+          description: Petición incorrecta. Faltan datos.
+
   # --- Endpoints de Libros ---
   /libros:
     get:
@@ -199,6 +233,35 @@ paths:
 
 components:
   schemas:
+    # --- Esquemas de Autenticación ---
+    LoginInput:
+      type: object
+      required:
+        - email
+        - contrasenia
+      properties:
+        nombre:
+          type: string
+          description: Nombre del usuario.
+          example: "Pedro Sánchez"
+        email:
+          type: string
+          format: email
+          description: Email del usuario registrado.
+          example: "pedro1@mail.com"
+        contrasenia:
+          type: string
+          format: password
+          description: Contraseña del usuario.
+          example: "hash6"
+    LoginSuccess:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token de acceso JWT.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNCIsIm5hbWUiOiJBbGJlcnRvIEPhcmRlbmFzIiwicm9sIjoiYWRtaW5pc3RyYWRvciIsImlhdCI6MTUxNjIzOTAyMn0.Y_8_Y2Yx-3s2b1A_Zc_x"
+
     # --- Esquema para Libro (respuesta) ---
     Libro:
       type: object
@@ -294,3 +357,8 @@ components:
         comentario:
           type: string
           example: "Muy útil para mejorar la calidad del código."
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

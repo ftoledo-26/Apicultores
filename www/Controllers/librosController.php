@@ -34,5 +34,8 @@
     public function export(string $ruta){
         $this->libro->export($ruta);
     }
+    public function cantidadLibros(): int {
+        return $this->libro->cantidadLibros();  
+    }
 }
 ?>

@@ -16,7 +16,7 @@ class usuariosController{
 
     public function PutActualizar($nuevoNombre, $nuevoEmail, $id) :void {
 
-        $this->usuarios->actualizarUser((INT)$id, $nuevoNombre, $nuevoEmail);
+        $this->usuarios->actualizarUsuario((int)$id, $nuevoNombre, $nuevoEmail);
         
     }
 

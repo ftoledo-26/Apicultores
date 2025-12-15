@@ -77,7 +77,6 @@
       <div>
         <button onclick="addToken()">Guardar</button>
         <button onclick="clearToken()" style="margin-left:6px;background:#f44336">Borrar</button>
-        <button onclick="copyTokenForPostman()" style="margin-left:6px;background:#009688">Copiar (Postman)</button>
       </div>
     </div>
 
@@ -119,20 +118,6 @@
 
     // Login removed — only token input is used now
 
-    function copyTokenForPostman(){
-      const token = document.getElementById('tokenInput').value || localStorage.getItem('userToken') || '';
-      if (!token) { alert('No hay token para copiar'); return; }
-      const headerValue = 'Bearer ' + token;
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(headerValue).then(()=>{
-          alert('Token copiado al portapapeles (lista para Postman)');
-        }, ()=>{
-          prompt('Copiar manualmente:', headerValue);
-        });
-      } else {
-        prompt('Copiar manualmente:', headerValue);
-      }
-    }
 
     window.onload = function() {
       // Cargar token guardado si existe
@@ -144,7 +129,21 @@
         url: "openapi.yaml", 
         dom_id: '#swagger-ui',
         deepLinking: true,
-        // Añadir header Authorization a todas las peticiones si existe token en localStorage
+        // Interceptor para la respuesta: si es un login exitoso, guarda el token.
+        responseInterceptor: (res) => {
+          if (res.ok && res.url.includes('/login.php') && res.body.token) {
+            const token = res.body.token;
+            document.getElementById('tokenInput').value = token;
+            localStorage.setItem('userToken', token);
+            currentToken = token;
+            // Pequeño retraso para asegurar que la UI esté lista
+            setTimeout(() => setSwaggerAuth(token), 100); 
+            alert('Token obtenido y guardado automáticamente.');
+          }
+          return res;
+        },
+
+        // Interceptor para la petición: añade el header Authorization si existe un token.
         requestInterceptor: (req) => {
           try{
             const t = localStorage.getItem('userToken') || '';

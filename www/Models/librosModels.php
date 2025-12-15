@@ -105,5 +105,12 @@
     exit;
 }
 
+    public function cantidadLibros(): int {
+        $sql = "SELECT COUNT(*) as total FROM libros";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $count = $stmt->fetchColumn();
+        return (int)$count;
+    }
 }
 ?>
