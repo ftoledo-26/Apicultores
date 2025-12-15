@@ -20,6 +20,20 @@
         return $this->libro->obtenerLibrosPaginados($limit, $page);
     }
 
+    public function GetLibrosOrdenados(string $orden): array{
+        return $this->libro->obtenerLibrosOrdenados($orden);
+    }
+
+
+
+    public function GetLibrosBuscados(string $search): array{
+        return $this->libro->obtenerLibrosBuscados($search);
+    }
+
+    public function GetLibrosCategorizados(int $id_categoria): array{
+        return $this->libro->obtenerTodosLibrosCategorias($id_categoria);
+    }
+
     public function actualizarLibro( $nuevoTitulo, $nuevoAutor, $nuevaCategoria, $id): void
     {
         $this->libro->actualizarLibro($nuevoTitulo, $nuevoAutor, (INT)$nuevaCategoria, (INT)$id);

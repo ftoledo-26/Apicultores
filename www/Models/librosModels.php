@@ -112,5 +112,38 @@
         $count = $stmt->fetchColumn();
         return (int)$count;
     }
+    public function obtenerLibrosOrdenados(string $orden): array
+    {
+        $ordenValido = in_array(strtoupper($orden), ['ASC', 'DESC']) ? strtoupper($orden) : 'ASC';
+        $sql = "SELECT * FROM libros ORDER BY id $ordenValido";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+    public function obtenerLibrosBuscados(string $search): array
+    {
+        $sql = "SELECT * FROM libros WHERE titulo LIKE :search OR autor LIKE :search";
+        $stmt = $this->conn->prepare($sql);
+        $likeSearch = '%' . $search . '%';
+        $stmt->bindParam(':search', $likeSearch, PDO::PARAM_STR);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
+
+        public function obtenerTodosLibrosCategorias(int $id_categoria): array
+    {
+        $sql = "SELECT * FROM libros WHERE id_categoria = :id_categoria";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id_categoria', $id_categoria, PDO::PARAM_INT);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        return $stmt->fetchAll();
+    }
 }
 ?>

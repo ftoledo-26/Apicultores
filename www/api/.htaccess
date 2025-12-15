@@ -8,22 +8,22 @@ RewriteRule ^usuarios/me/?$ usuarios.php?me=1 [L,QSA]
 RewriteRule ^libros/export/?$ libros.php?export=1 [L,QSA]
 RewriteRule ^libros/?$ libros.php [L,QSA]
 RewriteRule ^libros/([0-9]+)/?$ libros.php?id=$1 [L,QSA]
-RewriteRule ^libros/([0-9]+)/([^/]+)/?$ libros.php?id=$1&include=$2 [L,QSA]
-RewriteRule ^libros/([^/]+)/?$ libros.php?count=$1 [L,QSA]
+RewriteRule ^api/libros/?$ api/libros.php [L,QSA]
+RewriteRule ^categoria/([0-9]+)/libros/?$ libros.php?categoria=$1 [L,QSA]
 
 
 RewriteRule ^comentarios/?$ comentarios.php [L,QSA]
 RewriteRule ^comentarios/([0-9]+)/?$ comentarios.php?id=$1 [L,QSA]
 RewriteRule ^comentarios/([0-9]+)/([^/]+)/?$ comentarios.php?id=$1&include=$2 [L,QSA]
 
-RewriteRule ^categorias/?$ categorias.php [L,QSA]
-RewriteRule ^categorias/([0-9]+)/?$ categorias.php?id=$1 [L,QSA]
+#RewriteRule ^api/categorias/?$ categorias.php [L,QSA]
+#RewriteRule ^api/categorias/([0-9]+)/?$ categorias.php?id=$1 [L,QSA]
 
 
 RewriteRule ^usuarios/([0-9]+)/([0-9]+)/?$ usuarios.php?limit=$1&page=$2 [L,QSA]
 
 
-RewriteRule ^categorias/([0-9]+)/([^/]+)/?$ categorias.php?id=$1&include=$2 [L,QSA]
+#RewriteRule ^categorias/([0-9]+)/([^/]+)/?$ categorias.php?id=$1&include=$2 [L,QSA]
 
 
 
