@@ -13,7 +13,7 @@ class controladorComentarios{
         return $this->comentariosModel->getComentariosByUserId($id);
     }
 
-    public function PutComentario($comentario, $id): void{
+    public function PutComentario($comentario, int $id): void{
 
         $this->comentariosModel->actualizarComentario((STRING)$comentario, $id);
     }

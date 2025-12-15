@@ -102,14 +102,21 @@ switch ($metodo) {
                 $email = $data['email'] ?? null;
                 $contrasenia = $data['contrasenia'] ?? null;
                 $rol = $data['rol'] ?? 'usuario';
-
+                $user = $ControllerUser->ObtenerDatos($data['email']);
+                if($user){
+                    http_response_code(400);
+                    echo json_encode("Usuario ya existente");
+                    exit();
+                }
                 $nuevoId = $ControllerUser->crear([
                     'nombre' => $nombre,
                     'email' => $email,
                     'contrasenia' => $contrasenia,
                     'rol' => $rol
                 ]);
-
+                
+                
+                http_response_code(201);
                 echo json_encode(["message" => "Usuario creado", "id" => $nuevoId]);
             } else {
                 http_response_code(400);
