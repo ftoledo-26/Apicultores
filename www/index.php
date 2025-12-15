@@ -40,6 +40,13 @@ try {
                 <li><a href="/Views/librosViews.php">Gestión de Libros</a></li>
             </ul>
         </article>
+
+        <article>
+            <h2>Acceso al SWAGGER</h2>
+            <ul>
+                <li><a href="/dist/index.html">SWAGGER</a></li>
+            </ul>
+        </article>
         
     </main>
 

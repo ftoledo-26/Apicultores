@@ -1,0 +1,174 @@
+<!-- c:\Users\jcarmen0312\Desktop\TCG\swagger-ui-master\dist\index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Swagger UI</title>
+    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <style>
+      html
+      {
+        box-sizing: border-box;
+        overflow: -moz-scrollbars-vertical;
+        overflow-y: scroll;
+      }
+
+      *,
+      *:before,
+      *:after
+      {
+        box-sizing: inherit;
+      }
+
+      body
+      {
+        margin:0;
+        background: #fafafa;
+      }
+
+      .token-container {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 9999;
+      }
+
+      .token-container input {
+        padding: 8px;
+        margin-right: 5px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        width: 250px;
+      }
+
+      .token-container button {
+        padding: 8px 15px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .token-container button:hover {
+        background: #45a049;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+
+    <div class="token-container">
+      <div style="margin-bottom:8px;">
+        <input 
+          type="text" 
+          id="tokenInput" 
+          placeholder="Ingrese token de usuario"
+        />
+      </div>
+      <div>
+        <button onclick="addToken()">Guardar</button>
+        <button onclick="clearToken()" style="margin-left:6px;background:#f44336">Borrar</button>
+      </div>
+    </div>
+
+    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
+    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+    <script>
+    let currentToken = localStorage.getItem('userToken') || '';
+
+    function setSwaggerAuth(token){
+      if (!window.ui) return;
+      try{
+        const name = 'BearerAuth';
+        window.ui.preauthorizeApiKey && window.ui.preauthorizeApiKey(name, token);
+        if (window.ui.authActions && typeof window.ui.authActions.authorize === 'function'){
+          const scheme = { 'BearerAuth': {name: 'Authorization', schema: {type: 'apiKey'}, value: 'Bearer ' + token } };
+          window.ui.authActions.authorize(scheme);
+        }
+      }catch(e){console.warn('No se pudo preautorizar', e)}
+    }
+
+    function addToken() {
+      const token = document.getElementById('tokenInput').value;
+      if (token.trim()) {
+        localStorage.setItem('userToken', token);
+        currentToken = token;
+        alert('Token guardado correctamente');
+        setSwaggerAuth(token);
+      } else {
+        alert('Por favor ingrese un token');
+      }
+    }
+
+    function clearToken(){
+      localStorage.removeItem('userToken');
+      currentToken = '';
+      document.getElementById('tokenInput').value = '';
+      alert('Token borrado');
+    }
+
+    // Login removed — only token input is used now
+
+
+    window.onload = function() {
+      // Cargar token guardado si existe
+      if (currentToken) {
+        document.getElementById('tokenInput').value = currentToken;
+      }
+
+      const ui = SwaggerUIBundle({
+        url: "openapi.yaml", 
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        // Interceptor para la respuesta: si es un login exitoso, guarda el token.
+        responseInterceptor: (res) => {
+          if (res.ok && res.url.includes('/login.php') && res.body.token) {
+            const token = res.body.token;
+            document.getElementById('tokenInput').value = token;
+            localStorage.setItem('userToken', token);
+            currentToken = token;
+            // Pequeño retraso para asegurar que la UI esté lista
+            setTimeout(() => setSwaggerAuth(token), 100); 
+            alert('Token obtenido y guardado automáticamente.');
+          }
+          return res;
+        },
+
+        // Interceptor para la petición: añade el header Authorization si existe un token.
+        requestInterceptor: (req) => {
+          try{
+            const t = localStorage.getItem('userToken') || '';
+            if (t && t.trim()) {
+              req.headers = req.headers || {};
+              req.headers['Authorization'] = 'Bearer ' + t;
+            }
+          }catch(e){/* no-op */}
+          return req;
+        },
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        plugins: [
+          SwaggerUIBundle.plugins.DownloadUrl
+        ],
+        layout: "StandaloneLayout",
+        defaultModelsExpandDepth: 1,
+        defaultModelExpandDepth: 1
+      });
+      // End Swagger UI call region
+
+      window.ui = ui;
+    };
+  </script>
+  </body>
+</html>

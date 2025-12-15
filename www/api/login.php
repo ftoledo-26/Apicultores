@@ -54,7 +54,7 @@ else {
         exit;
     }
 }
-echo json_encode(["message" => "Autenticación exitosa $password"]);
+//echo json_encode(["message" => "Autenticación exitosa $password"]); // Se elimina esta línea para no enviar una respuesta prematura
 $payload = [
     "id"    => $usuarioDB['id'],
     "email" => $usuarioDB['email'],

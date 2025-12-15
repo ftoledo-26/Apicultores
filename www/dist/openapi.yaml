@@ -1,0 +1,364 @@
+openapi: 3.0.3
+info:
+  title: API de Biblioteca y Libros
+  description: |-
+    Esta es la documentación para la API de gestión de una biblioteca. 
+    Permite a los usuarios autenticarse para obtener un token y luego realizar operaciones CRUD sobre libros, categorías y comentarios.
+
+    **Cómo autenticarse:**
+    1.  Usa el endpoint `POST /login.php` con tus credenciales.
+    2.  Si son correctas, recibirás un `token` en la respuesta.
+    3.  Copia ese token en el campo "Ingrese token de usuario" de la esquina superior derecha y haz clic en "Guardar". Las peticiones a endpoints protegidos (🔒) usarán este token automáticamente.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+    description: Servidor de desarrollo
+
+tags:
+  - name: Autenticación
+    description: Obtener token de acceso.
+  - name: Libros
+    description: Operaciones sobre los libros
+  - name: Usuarios
+    description: Gestión de usuarios
+  - name: Categorías
+    description: Operaciones sobre las categorías de libros
+  - name: Comentarios
+    description: Gestión de comentarios en los libros
+
+paths:
+  # --- Endpoint de Autenticación ---
+  /login.php:
+    post:
+      tags:
+        - Autenticación
+      summary: Iniciar sesión para obtener un token de acceso
+      description: Proporciona tus credenciales para recibir un token JWT. Este token debe ser usado en la cabecera `Authorization` como `Bearer {token}` para acceder a los endpoints protegidos.
+      operationId: loginUser
+      requestBody:
+        description: Credenciales del usuario para iniciar sesión.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        '200':
+          description: Autenticación exitosa.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSuccess'
+        '401':
+          description: No autorizado. Credenciales inválidas.
+        '400':
+          description: Petición incorrecta. Faltan datos.
+
+  # --- Endpoints de Libros ---
+  /libros:
+    get:
+      tags:
+        - Libros
+      summary: Obtener todos los libros
+      responses:
+        '200':
+          description: Lista de libros obtenida con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Libro'
+    post:
+      tags:
+        - Libros
+      summary: Crear un nuevo libro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibroInput'
+      responses:
+        '201':
+          description: Libro creado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Libro'
+        '400':
+          description: Datos de entrada inválidos.
+
+  /libros/{id}:
+    get:
+      tags:
+        - Libros
+      summary: Obtener un libro por su ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalles del libro.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Libro'
+        '404':
+          description: Libro no encontrado.
+    put:
+      tags:
+        - Libros
+      summary: Actualizar un libro existente
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LibroInput'
+      responses:
+        '200':
+          description: Libro actualizado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Libro'
+        '404':
+          description: Libro no encontrado.
+    delete:
+      tags:
+        - Libros
+      summary: Eliminar un libro
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Libro eliminado con éxito.
+        '404':
+          description: Libro no encontrado.
+
+  # --- Endpoints de Usuarios ---
+  /usuarios:
+    get:
+      tags:
+        - Usuarios
+      summary: Obtener todos los usuarios
+      responses:
+        '200':
+          description: Lista de usuarios.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Usuario'
+
+  # --- Endpoints de Categorías ---
+  /categorias:
+    get:
+      tags:
+        - Categorías
+      summary: Obtener todas las categorías
+      responses:
+        '200':
+          description: Lista de categorías.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Categoria'
+
+  # --- Endpoints de Comentarios (anidados en libros) ---
+  /libros/{libroId}/comentarios:
+    get:
+      tags:
+        - Comentarios
+      summary: Obtener comentarios de un libro específico
+      parameters:
+        - name: libroId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de comentarios del libro.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comentario'
+        '404':
+          description: Libro no encontrado.
+    post:
+      tags:
+        - Comentarios
+      summary: Añadir un nuevo comentario a un libro
+      parameters:
+        - name: libroId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComentarioInput'
+      responses:
+        '201':
+          description: Comentario creado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comentario'
+        '404':
+          description: Libro o usuario no encontrado.
+
+components:
+  schemas:
+    # --- Esquemas de Autenticación ---
+    LoginInput:
+      type: object
+      required:
+        - email
+        - contrasenia
+      properties:
+        nombre:
+          type: string
+          description: Nombre del usuario.
+          example: "Pedro Sánchez"
+        email:
+          type: string
+          format: email
+          description: Email del usuario registrado.
+          example: "pedro1@mail.com"
+        contrasenia:
+          type: string
+          format: password
+          description: Contraseña del usuario.
+          example: "hash6"
+    LoginSuccess:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token de acceso JWT.
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNCIsIm5hbWUiOiJBbGJlcnRvIEPhcmRlbmFzIiwicm9sIjoiYWRtaW5pc3RyYWRvciIsImlhdCI6MTUxNjIzOTAyMn0.Y_8_Y2Yx-3s2b1A_Zc_x"
+
+    # --- Esquema para Libro (respuesta) ---
+    Libro:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID único del libro.
+          example: 1
+        titulo:
+          type: string
+          description: Título del libro.
+          example: "Cien Años de Soledad"
+        autor:
+          type: string
+          description: Autor del libro.
+          example: "Gabriel García Márquez"
+        id_categoria:
+          type: integer
+          description: ID de la categoría a la que pertenece.
+          example: 1
+
+    # --- Esquema para Libro (entrada/creación) ---
+    LibroInput:
+      type: object
+      properties:
+        titulo:
+          type: string
+          example: "Clean Code"
+        autor:
+          type: string
+          example: "Robert C. Martin"
+        id_categoria:
+          type: integer
+          example: 3
+
+    # --- Esquema para Usuario ---
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: "Juan Pérez"
+        email:
+          type: string
+          format: email
+          example: "juan@example.com"
+        rol:
+          type: string
+          example: "lector"
+
+    # --- Esquema para Categoría ---
+    Categoria:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: "Ficción"
+
+    # --- Esquema para Comentario (respuesta) ---
+    Comentario:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 101
+        id_usuario:
+          type: integer
+          example: 1
+        id_libro:
+          type: integer
+          example: 1
+        comentario:
+          type: string
+          example: "Un libro increíble, lo recomiendo totalmente."
+        fecha:
+          type: string
+          format: date-time
+          example: "2023-10-27T10:00:00Z"
+
+    # --- Esquema para Comentario (entrada/creación) ---
+    ComentarioInput:
+      type: object
+      properties:
+        id_usuario:
+          type: integer
+          example: 2
+        comentario:
+          type: string
+          example: "Muy útil para mejorar la calidad del código."
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

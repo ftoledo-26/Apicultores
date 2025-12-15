@@ -108,7 +108,7 @@ switch ($metodo) {
 
     break;
     case "DELETE":
-        if ($token->rol !== 'administrador') {
+        if (!$token || !property_exists($token, 'rol') || $token->rol !== 'administrador') {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado. Solo administradores pueden eliminar libros."]);
             exit;
@@ -119,9 +119,8 @@ switch ($metodo) {
                 echo json_encode(["Introduzca un id adecuado"]);
             }
         break;
-
     case "PUT":
-        if ($token->rol !== 'administrador') {
+        if (!$token || !property_exists($token, 'rol') || $token->rol !== 'administrador') {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado. Solo administradores pueden actualizar libros."]);
             exit;
@@ -149,7 +148,7 @@ switch ($metodo) {
         }
         break;
     case "POST":
-        if ($token->rol !== 'administrador') {
+        if (!$token || !property_exists($token, 'rol') || $token->rol !== 'administrador') {
             http_response_code(403);
             echo json_encode(["error" => "Acceso denegado. Solo administradores pueden crear libros."]);
             exit;
