@@ -18,10 +18,16 @@ $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 $page = isset($_GET["page"]) ? (int) $_GET["page"] : null;
 $limit = isset($_GET["limit"]) ? (int) $_GET["limit"] : null; 
 $relacion = isset($_GET["include"]) ? $_GET["include"] : null;
-$esport = isset($_GET[''])
+$orden = isset($_GET["order"]) ? $_GET["order"] : null;
+$search = isset($_GET["search"]) ? $_GET["search"] : null;
+$categoria = isset($_GET["categoria"]) ? (int) $_GET["categoria"] : null;
+
+//$esport = isset($_GET['']);
 
 switch ($metodo) {
     case "GET":
+
+        echo json_encode("la categoria es: " . $categoria);
 
         if ($id !== null && $relacion !== null) {
             $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
@@ -32,7 +38,43 @@ switch ($metodo) {
                 http_response_code(404);
                 echo json_encode(["error" => "Libro no encontrado"]);
             }
-        }    
+        }
+        else if ($categoria !== null) {
+
+            $librosCategorizados = $ControllerUser->GetLibrosCategorizados($categoria);
+            if($librosCategorizados){
+                http_response_code(200);
+                echo json_encode($librosCategorizados);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "No se encontraron libros para esta categoría."]);
+                exit;
+            }
+        }   
+        else if ($orden !== null) {
+
+            $librosOrdenados = $ControllerUser->GetLibrosOrdenados($orden);
+            if($librosOrdenados){
+                http_response_code(200);
+                echo json_encode($librosOrdenados);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "Escribe una regla de orden correcta. Valores válidos: 'asc' o 'desc'."]);
+                exit;
+            }
+        }   
+        else if ($search !== null) {
+
+            $librosBuscados = $ControllerUser->GetLibrosBuscados($search);
+            if($librosBuscados){
+                http_response_code(200);
+                echo json_encode($librosBuscados);
+            } else {
+                http_response_code(404);
+                echo json_encode(["error" => "No se encontraron libros que coincidan con la búsqueda."]);
+                exit;
+            }
+        } 
         else if ($limit !== null && $page !== null) {
 
             $librosPaginados = $ControllerUser->GetLibrosPaginados($limit, $page);
