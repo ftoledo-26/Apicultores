@@ -25,6 +25,7 @@ switch ($metodo) {
     case "GET":
         if($esport !== null){
             $ControllerUser->export("librito.json");
+            exit;
         }
         else if ($id !== null && $relacion !== null) {
             $Libros = $ControllerUser->obtenerPorIdyCategoria($id, $relacion);
@@ -51,6 +52,7 @@ switch ($metodo) {
         else if($count !== null){
             $totalLibros = $ControllerUser->cantidadLibros();
             echo json_encode(["total_libros" => $totalLibros]);
+
         }
         else if ($id !== null) {
             $Libros = $ControllerUser->GetLibrosById($id);
@@ -117,7 +119,7 @@ switch ($metodo) {
         
         $titulo = $input['titulo'] ?? null;
         $autor = $input['autor'] ?? null;
-        $categoria = (int) ($input['categoria'] ?? null);
+        $categoria = (int) ($input['categoria_id'] ?? null);
         echo json_encode(["titulo" => $titulo, "autor" => $autor, "categoria" => $categoria]);
         if ($titulo && $autor && $categoria) {
             $ControllerUser->crearLibro($titulo, $autor, $categoria);

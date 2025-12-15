@@ -18,11 +18,16 @@ $ControllerUser = new usuariosController($Usuario);
 $metodo = $_SERVER["REQUEST_METHOD"];
 $id = isset($_GET["id"]) ? (int) $_GET["id"] : null;
 $relacion = isset($_GET["relacion"]) ? $_GET["relacion"] : null;
+$me = isset($_GET["me"]) ? $_GET["me"] : null;
 
 
 switch ($metodo) {
     case "GET":
-        if ($id !== null && $relacion !== null) {
+        if($me !== null){
+            echo json_encode($datosToken);
+            exit;
+        }
+        else if ($id !== null && $relacion !== null) {
             $usuario = $ControllerUser->obtenerPorIdyRelacion($id, $relacion);
             
             if ($usuario) {
